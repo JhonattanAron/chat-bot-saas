@@ -1,40 +1,39 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { MessageSquare, X, Send, Minimize2, Maximize2 } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { MessageSquare, X, Send, Minimize2, Maximize2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ChatSettings = {
-  title: string
-  subtitle: string
-  primaryColor: string
-  buttonColor: string
-  bubbleColor: string
-  userBubbleColor: string
-  headerStyle: "gradient" | "solid"
-  logo?: string
-  showLogo: boolean
-  position: "right" | "left"
-  initialMessage: string
-  placeholderText: string
-}
+  title: string;
+  subtitle: string;
+  primaryColor: string;
+  buttonColor: string;
+  bubbleColor: string;
+  userBubbleColor: string;
+  userTextColor?: string; // Nuevo parámetro
+  botTextColor?: string; // Nuevo parámetro
+  headerStyle: "gradient" | "solid";
+  logo?: string;
+  showLogo: boolean;
+  position: "right" | "left";
+  initialMessage: string;
+  placeholderText: string;
+};
 
 type Message = {
-  id: string
-  content: string
-  sender: "user" | "bot"
-  timestamp: Date
-}
+  id: string;
+  content: string;
+  sender: "user" | "bot";
+  timestamp: Date;
+};
 
 export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
-  // Update the ChatWidgetPreview component to always show the chat window by default
-  // Change the initial state of isOpen to true
-  const [isOpen, setIsOpen] = useState(true)
-
-  // Also update the isMinimized state to false by default
-  const [isMinimized, setIsMinimized] = useState(false)
+  const [isOpen, setIsOpen] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -42,8 +41,8 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
       sender: "bot",
       timestamp: new Date(),
     },
-  ])
-  const [input, setInput] = useState("")
+  ]);
+  const [input, setInput] = useState("");
 
   const defaultSettings: ChatSettings = {
     title: "ChatBot Support",
@@ -52,46 +51,51 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
     buttonColor: "#4f46e5",
     bubbleColor: "#f9fafb",
     userBubbleColor: "#000000",
+    userTextColor: "#fff", // Valor por defecto
+    botTextColor: "#000", // Valor por defecto
     headerStyle: "gradient",
     showLogo: true,
     position: "right",
     initialMessage: "Hello! How can I help you today?",
     placeholderText: "Type your message...",
-  }
+  };
 
-  const chatSettings = settings || defaultSettings
+  const chatSettings = { ...defaultSettings, ...settings };
 
   const handleSendMessage = () => {
-    if (!input.trim()) return
+    if (!input.trim()) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input,
       sender: "user",
       timestamp: new Date(),
-    }
+    };
 
-    setMessages((prev) => [...prev, userMessage])
-    setInput("")
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
 
     // Simulate bot response
     setTimeout(() => {
       const botMessage: Message = {
         id: Date.now().toString(),
-        content: "This is a preview of how your chatbot will respond to user messages.",
+        content:
+          "This is a preview of how your chatbot will respond to user messages.",
         sender: "bot",
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, botMessage])
-    }, 1000)
-  }
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    }, 1000);
+  };
 
   const headerStyle =
     chatSettings.headerStyle === "gradient"
       ? {
-          background: `linear-gradient(to right, ${chatSettings.primaryColor}, ${adjustColor(chatSettings.primaryColor, -30)})`,
+          background: `linear-gradient(to right, ${
+            chatSettings.primaryColor
+          }, ${adjustColor(chatSettings.primaryColor, -30)})`,
         }
-      : { background: chatSettings.primaryColor }
+      : { background: chatSettings.primaryColor };
 
   return (
     <div className="chat-widget-preview">
@@ -112,27 +116,48 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
             style={{ maxWidth: "300px" }}
           >
             {/* Chat Header */}
-            <div className="p-3 flex justify-between items-center" style={headerStyle}>
+            <div
+              className="p-3 flex justify-between items-center"
+              style={headerStyle}
+            >
               <div className="flex items-center">
                 {chatSettings.showLogo && (
                   <div className="bg-white/20 rounded-full p-1.5 mr-2">
                     {chatSettings.logo ? (
-                      <img src={chatSettings.logo || "/placeholder.svg"} alt="Logo" className="h-4 w-4" />
+                      <img
+                        src={chatSettings.logo || "/placeholder.svg"}
+                        alt="Logo"
+                        className="h-4 w-4"
+                      />
                     ) : (
                       <MessageSquare className="h-4 w-4 text-white" />
                     )}
                   </div>
                 )}
                 <div>
-                  <h3 className="font-medium text-white text-sm">{chatSettings.title}</h3>
-                  <p className="text-xs text-gray-200">{chatSettings.subtitle}</p>
+                  <h3 className="font-medium text-white text-sm">
+                    {chatSettings.title}
+                  </h3>
+                  <p className="text-xs text-gray-200">
+                    {chatSettings.subtitle}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-1">
-                <button onClick={() => setIsMinimized(!isMinimized)} className="text-gray-200 hover:text-white p-1">
-                  {isMinimized ? <Maximize2 size={14} /> : <Minimize2 size={14} />}
+                <button
+                  onClick={() => setIsMinimized(!isMinimized)}
+                  className="text-gray-200 hover:text-white p-1"
+                >
+                  {isMinimized ? (
+                    <Maximize2 size={14} />
+                  ) : (
+                    <Minimize2 size={14} />
+                  )}
                 </button>
-                <button onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white p-1">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-200 hover:text-white p-1"
+                >
                   <X size={14} />
                 </button>
               </div>
@@ -150,7 +175,11 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
                   {messages.map((message) => (
                     <div
                       key={message.id}
-                      className={`mb-3 flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                      className={`mb-3 flex ${
+                        message.sender === "user"
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
                     >
                       {message.sender === "bot" && (
                         <div className="mr-1.5 flex-shrink-0">
@@ -166,19 +195,29 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
                         className={`chat-bubble p-2 rounded-lg max-w-[75%] text-sm`}
                         style={{
                           background:
-                            message.sender === "user" ? chatSettings.userBubbleColor : chatSettings.bubbleColor,
-                          color: message.sender === "user" ? "#fff" : "#000",
+                            message.sender === "user"
+                              ? chatSettings.userBubbleColor
+                              : chatSettings.bubbleColor,
+                          color:
+                            message.sender === "user"
+                              ? chatSettings.userTextColor || "#fff"
+                              : chatSettings.botTextColor || "#000",
                         }}
                       >
                         <p className="text-xs">{message.content}</p>
                         <p className="text-[10px] mt-1 opacity-60">
-                          {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          {message.timestamp.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </p>
                       </div>
                       {message.sender === "user" && (
                         <div className="ml-1.5 flex-shrink-0">
                           <div className="bg-gray-300 dark:bg-gray-700 rounded-full h-6 w-6 flex items-center justify-center">
-                            <span className="text-[10px] font-medium text-gray-800 dark:text-white">Tú</span>
+                            <span className="text-[10px] font-medium text-gray-800 dark:text-white">
+                              Tú
+                            </span>
                           </div>
                         </div>
                       )}
@@ -199,8 +238,8 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
                     className="flex-grow mr-1 h-8 text-xs"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        e.preventDefault()
-                        handleSendMessage()
+                        e.preventDefault();
+                        handleSendMessage();
                       }
                     }}
                   />
@@ -235,12 +274,11 @@ export function ChatWidgetPreview({ settings }: { settings?: ChatSettings }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Helper function to adjust color brightness
 function adjustColor(color: string, amount: number): string {
-  return color
-  // In a real implementation, this would adjust the color brightness
-  // For simplicity in this preview, we're just returning the original color
+  return color;
+  // En una implementación real, aquí se ajustaría el brillo del color
 }

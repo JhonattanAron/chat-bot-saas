@@ -1,41 +1,71 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { DashboardLayout } from "@/components/dashboard-layout"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Globe, MessageSquare, ArrowLeft, Plus, Trash2, Loader2, Sparkles } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Switch } from "@/components/ui/switch"
-import { useLanguage } from "@/contexts/language-context"
-import { TokenCounter } from "@/components/token-counter"
-import { ChatWidgetPreview } from "@/components/chat-widget-preview"
-import { ProductModal } from "@/components/product-modal"
-import { UseCaseSelector } from "@/components/use-case-selector"
-import { CalendarIntegration } from "@/components/calendar-integration"
-import { FunctionModal } from "@/components/function-modal"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { DashboardLayout } from "@/components/dashboard-layout";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Globe,
+  MessageSquare,
+  ArrowLeft,
+  Plus,
+  Trash2,
+  Loader2,
+  Sparkles,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Switch } from "@/components/ui/switch";
+import { useLanguage } from "@/contexts/language-context";
+import { TokenCounter } from "@/components/token-counter";
+import { ChatWidgetPreview } from "@/components/chat-widget-preview";
+import { ProductModal } from "@/components/product-modal";
+import { UseCaseSelector } from "@/components/use-case-selector";
+import { CalendarIntegration } from "@/components/calendar-integration";
+import { FunctionModal } from "@/components/function-modal";
+import { MuiColorInput } from "mui-color-input";
+import { ChatWidgetCustomization } from "@/components/chat_cuztomization/chat-widget-customization";
+import SimpleAlert from "@/components/ui/simple-alert";
 
 export default function CreateBotPage() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [botType, setBotType] = useState("web")
-  const [useCase, setUseCase] = useState("restaurant")
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false)
-  const [isGeneratingFaqs, setIsGeneratingFaqs] = useState(false)
-  const [welcomeMessage, setWelcomeMessage] = useState("")
-  const [description, setDescription] = useState("")
-  const [businessDescription, setBusinessDescription] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+  const [botType, setBotType] = useState("web");
+  const [useCase, setUseCase] = useState("restaurant");
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isGeneratingFaqs, setIsGeneratingFaqs] = useState(false);
+  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [description, setDescription] = useState("");
+  const [businessDescription, setBusinessDescription] = useState("");
   const [chatSettings, setChatSettings] = useState({
     title: "ChatBot Support",
     subtitle: "Virtual Assistant",
@@ -48,7 +78,7 @@ export default function CreateBotPage() {
     position: "right" as "right" | "left",
     initialMessage: "Hello! How can I help you today?",
     placeholderText: "Type your message...",
-  })
+  });
   const [faqs, setFaqs] = useState([
     {
       question: "What are your business hours?",
@@ -57,111 +87,126 @@ export default function CreateBotPage() {
     },
     {
       question: "How do I reset my password?",
-      answer: "You can reset your password by clicking on the 'Forgot Password' link on the login page.",
+      answer:
+        "You can reset your password by clicking on the 'Forgot Password' link on the login page.",
       category: "Account",
     },
-  ])
+  ]);
   const [products, setProducts] = useState([
     {
       name: "Premium Plan",
       price: "$99.99",
-      description: "Our premium plan includes all features and priority support.",
+      description:
+        "Our premium plan includes all features and priority support.",
       available: true,
       stock: "150",
     },
     {
       name: "Basic Plan",
       price: "$49.99",
-      description: "Our basic plan includes essential features for small businesses.",
+      description:
+        "Our basic plan includes essential features for small businesses.",
       available: true,
     },
-  ])
-  const [apiProducts, setApiProducts] = useState<{ apiUrl: string; apiKey: string }[]>([])
-  const [functions, setFunctions] = useState<any[]>([])
-  const [isFunctionModalOpen, setIsFunctionModalOpen] = useState(false)
+  ]);
+  const [apiProducts, setApiProducts] = useState<
+    { apiUrl: string; apiKey: string }[]
+  >([]);
+  const [functions, setFunctions] = useState<any[]>([]);
+  const [isFunctionModalOpen, setIsFunctionModalOpen] = useState(false);
 
   // Agregar estado después de los existentes
-  const [activeBots, setActiveBots] = useState(2) // Simular 2 bots activos
-  const [userPlan, setUserPlan] = useState("basic") // Simular plan básico
+  const [activeBots, setActiveBots] = useState(2); // Simular 2 bots activos
+  const [userPlan, setUserPlan] = useState("basic"); // Simular plan básico
 
   // Agregar límites de planes
   const planLimits = {
     basic: 3,
     pro: 10,
     enterprise: 50,
-  }
+  };
 
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
 
   // Safe language context usage with fallback
-  const languageContext = useLanguage()
-  let t: (key: string) => string = (key: string) => key
-  let language = "en"
+  const languageContext = useLanguage();
+  let t: (key: string) => string = (key: string) => key;
+  let language = "en";
 
   if (languageContext) {
-    t = languageContext.t
-    language = languageContext.language
+    t = languageContext.t;
+    language = languageContext.language;
   } else {
-    console.warn("Language context not available, using fallback")
+    console.warn("Language context not available, using fallback");
   }
 
   // Calcular tokens aproximados para los campos principales
-  const welcomeMessageTokens = welcomeMessage.length > 0 ? Math.ceil(welcomeMessage.length / 4) : 0
-  const descriptionTokens = description.length > 0 ? Math.ceil(description.length / 4) : 0
+  const welcomeMessageTokens =
+    welcomeMessage.length > 0 ? Math.ceil(welcomeMessage.length / 4) : 0;
+  const descriptionTokens =
+    description.length > 0 ? Math.ceil(description.length / 4) : 0;
 
   // Calcular tokens para FAQs
   const faqTokens = faqs.reduce((total, faq) => {
-    return total + Math.ceil((faq.question.length + faq.answer.length) / 4)
-  }, 0)
+    return total + Math.ceil((faq.question.length + faq.answer.length) / 4);
+  }, 0);
 
   // Calcular tokens para productos
   const productTokens = products.reduce((total, product) => {
-    return total + Math.ceil((product.name.length + product.description.length) / 4)
-  }, 0)
+    return (
+      total + Math.ceil((product.name.length + product.description.length) / 4)
+    );
+  }, 0);
 
   // Total de tokens
-  const totalTokens = welcomeMessageTokens + descriptionTokens + faqTokens + productTokens
+  const totalTokens =
+    welcomeMessageTokens + descriptionTokens + faqTokens + productTokens;
 
   // Modificar el handleSubmit para incluir validación
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Verificar límite de bots
     if (activeBots >= planLimits[userPlan as keyof typeof planLimits]) {
       toast({
-        title: language === "en" ? "Bot Limit Reached" : "Límite de Bots Alcanzado",
+        title:
+          language === "en" ? "Bot Limit Reached" : "Límite de Bots Alcanzado",
         description:
           language === "en"
             ? `You've reached the maximum number of bots for your ${userPlan} plan. Please upgrade to create more bots.`
             : `Has alcanzado el número máximo de bots para tu plan ${userPlan}. Por favor actualiza tu plan para crear más bots.`,
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     // Collect form data
-    const formData = new FormData(e.currentTarget)
-    const botName = formData.get("bot-name") as string
-    const botDescription = formData.get("bot-description") as string
-    const welcomeMessage = formData.get("welcome-message") as string
-    const primaryColor = formData.get("primary-color-hex") as string
+    const formData = new FormData(e.currentTarget);
+    const botName = formData.get("bot-name") as string;
+    const botDescription = formData.get("bot-description") as string;
+    const welcomeMessage = formData.get("welcome-message") as string;
+    const primaryColor = formData.get("primary-color-hex") as string;
 
     // Simulate bot creation
     setTimeout(() => {
-      setIsLoading(false)
-      setActiveBots((prev) => prev + 1) // Incrementar contador
+      setIsLoading(false);
+      setActiveBots((prev) => prev + 1); // Incrementar contador
       toast({
         title: language === "en" ? "Bot Created" : "Bot Creado",
-        description: `${language === "en" ? "Your bot" : "Tu bot"} "${botName}" ${
-          language === "en" ? "has been created successfully" : "ha sido creado exitosamente"
+        description: `${
+          language === "en" ? "Your bot" : "Tu bot"
+        } "${botName}" ${
+          language === "en"
+            ? "has been created successfully"
+            : "ha sido creado exitosamente"
         }.`,
-      })
-      router.push("/dashboard/bots")
-    }, 1500)
-  }
+      });
+      router.push("/dashboard/bots");
+    }, 1500);
+  };
 
   const handleAddFaq = () => {
     setFaqs([
@@ -171,60 +216,68 @@ export default function CreateBotPage() {
         answer: "",
         category: "General",
       },
-    ])
-  }
+    ]);
+  };
 
-  const handleUpdateFaq = (index: number, field: "question" | "answer" | "category", value: string) => {
-    const updatedFaqs = [...faqs]
-    updatedFaqs[index] = { ...updatedFaqs[index], [field]: value }
-    setFaqs(updatedFaqs)
-  }
+  const handleUpdateFaq = (
+    index: number,
+    field: "question" | "answer" | "category",
+    value: string
+  ) => {
+    const updatedFaqs = [...faqs];
+    updatedFaqs[index] = { ...updatedFaqs[index], [field]: value };
+    setFaqs(updatedFaqs);
+  };
 
   const handleRemoveFaq = (index: number) => {
-    const updatedFaqs = faqs.filter((_, i) => i !== index)
-    setFaqs(updatedFaqs)
-  }
+    const updatedFaqs = faqs.filter((_, i) => i !== index);
+    setFaqs(updatedFaqs);
+  };
 
   const handleAddProduct = (product: any, method: "manual" | "api") => {
     if (method === "manual") {
-      setProducts([...products, product])
+      setProducts([...products, product]);
     } else {
-      setApiProducts([...apiProducts, product])
+      setApiProducts([...apiProducts, product]);
       toast({
         title: language === "en" ? "API Connected" : "API Conectada",
         description:
           language === "en"
             ? "Your product API has been connected successfully. Products will be imported automatically."
             : "Tu API de productos ha sido conectada exitosamente. Los productos se importarán automáticamente.",
-      })
+      });
     }
-  }
+  };
 
   const handleRemoveProduct = (index: number) => {
-    const updatedProducts = products.filter((_, i) => i !== index)
-    setProducts(updatedProducts)
-  }
+    const updatedProducts = products.filter((_, i) => i !== index);
+    setProducts(updatedProducts);
+  };
 
   const handleGenerateFaqs = () => {
     if (!businessDescription) {
       toast({
-        title: language === "en" ? "Missing information" : "Información faltante",
+        title:
+          language === "en" ? "Missing information" : "Información faltante",
         description:
           language === "en"
             ? "Please provide a business description to generate FAQs."
             : "Por favor proporciona una descripción del negocio para generar preguntas frecuentes.",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setIsGeneratingFaqs(true)
+    setIsGeneratingFaqs(true);
 
     // Simulate generating FAQs with AI
     setTimeout(() => {
       const generatedFaqs = [
         {
-          question: language === "en" ? "What makes your products unique?" : "¿Qué hace que tus productos sean únicos?",
+          question:
+            language === "en"
+              ? "What makes your products unique?"
+              : "¿Qué hace que tus productos sean únicos?",
           answer:
             language === "en"
               ? "Our products are designed with cutting-edge technology and user-centric approach, making them intuitive and powerful."
@@ -232,7 +285,10 @@ export default function CreateBotPage() {
           category: "Products",
         },
         {
-          question: language === "en" ? "Do you offer customer support?" : "¿Ofrecen soporte al cliente?",
+          question:
+            language === "en"
+              ? "Do you offer customer support?"
+              : "¿Ofrecen soporte al cliente?",
           answer:
             language === "en"
               ? "Yes, we provide 24/7 customer support through various channels including chat, email, and phone."
@@ -240,45 +296,54 @@ export default function CreateBotPage() {
           category: "Support",
         },
         {
-          question: language === "en" ? "What payment methods do you accept?" : "¿Qué métodos de pago aceptan?",
+          question:
+            language === "en"
+              ? "What payment methods do you accept?"
+              : "¿Qué métodos de pago aceptan?",
           answer:
             language === "en"
               ? "We accept all major credit cards, PayPal, and bank transfers. For enterprise clients, we also offer invoicing options."
               : "Aceptamos todas las tarjetas de crédito principales, PayPal y transferencias bancarias. Para clientes empresariales, también ofrecemos opciones de facturación.",
           category: "Billing",
         },
-      ]
+      ];
 
-      setFaqs([...faqs, ...generatedFaqs])
-      setIsGeneratingFaqs(false)
+      setFaqs([...faqs, ...generatedFaqs]);
+      setIsGeneratingFaqs(false);
 
       toast({
-        title: language === "en" ? "FAQs Generated" : "Preguntas Frecuentes Generadas",
+        title:
+          language === "en"
+            ? "FAQs Generated"
+            : "Preguntas Frecuentes Generadas",
         description:
           language === "en"
             ? "AI has generated new FAQs based on your business description."
             : "La IA ha generado nuevas preguntas frecuentes basadas en la descripción de tu negocio.",
-      })
-    }, 2000)
-  }
+      });
+    }, 2000);
+  };
 
   const handleUpdateChatSettings = (field: string, value: any) => {
     setChatSettings({
       ...chatSettings,
       [field]: value,
-    })
-  }
+    });
+  };
 
   // Función para cargar plantillas según el caso de uso
   const loadUseCaseTemplate = (selectedUseCase: string) => {
-    setUseCase(selectedUseCase)
+    setUseCase(selectedUseCase);
 
     // Configurar FAQs según el caso de uso
     switch (selectedUseCase) {
       case "restaurant":
         setFaqs([
           {
-            question: language === "en" ? "What are your opening hours?" : "¿Cuáles son sus horarios de apertura?",
+            question:
+              language === "en"
+                ? "What are your opening hours?"
+                : "¿Cuáles son sus horarios de apertura?",
             answer:
               language === "en"
                 ? "We are open Monday to Friday from 11am to 10pm, and weekends from 12pm to 11pm."
@@ -286,7 +351,10 @@ export default function CreateBotPage() {
             category: "General",
           },
           {
-            question: language === "en" ? "Do you take reservations?" : "¿Aceptan reservaciones?",
+            question:
+              language === "en"
+                ? "Do you take reservations?"
+                : "¿Aceptan reservaciones?",
             answer:
               language === "en"
                 ? "Yes, you can make a reservation by calling us or through our website."
@@ -294,14 +362,17 @@ export default function CreateBotPage() {
             category: "Reservations",
           },
           {
-            question: language === "en" ? "Do you have vegetarian options?" : "¿Tienen opciones vegetarianas?",
+            question:
+              language === "en"
+                ? "Do you have vegetarian options?"
+                : "¿Tienen opciones vegetarianas?",
             answer:
               language === "en"
                 ? "Yes, we offer a variety of vegetarian and vegan dishes."
                 : "Sí, ofrecemos una variedad de platos vegetarianos y veganos.",
             category: "Menu",
           },
-        ])
+        ]);
         setProducts([
           {
             name: language === "en" ? "Special Dinner" : "Cena Especial",
@@ -323,17 +394,20 @@ export default function CreateBotPage() {
             available: true,
             stock: "40",
           },
-        ])
+        ]);
         setBusinessDescription(
           language === "en"
             ? "We are a fine dining restaurant specializing in international cuisine with a focus on local ingredients. Our chefs create unique dishes that blend traditional recipes with modern techniques."
-            : "Somos un restaurante de alta cocina especializado en cocina internacional con enfoque en ingredientes locales. Nuestros chefs crean platos únicos que combinan recetas tradicionales con técnicas modernas.",
-        )
-        break
+            : "Somos un restaurante de alta cocina especializado en cocina internacional con enfoque en ingredientes locales. Nuestros chefs crean platos únicos que combinan recetas tradicionales con técnicas modernas."
+        );
+        break;
       case "onlineStore":
         setFaqs([
           {
-            question: language === "en" ? "What are your shipping options?" : "¿Cuáles son sus opciones de envío?",
+            question:
+              language === "en"
+                ? "What are your shipping options?"
+                : "¿Cuáles son sus opciones de envío?",
             answer:
               language === "en"
                 ? "We offer standard shipping (3-5 days) and express shipping (1-2 days)."
@@ -341,7 +415,10 @@ export default function CreateBotPage() {
             category: "Shipping",
           },
           {
-            question: language === "en" ? "What is your return policy?" : "¿Cuál es su política de devoluciones?",
+            question:
+              language === "en"
+                ? "What is your return policy?"
+                : "¿Cuál es su política de devoluciones?",
             answer:
               language === "en"
                 ? "You can return any item within 30 days of purchase for a full refund."
@@ -349,14 +426,17 @@ export default function CreateBotPage() {
             category: "Returns",
           },
           {
-            question: language === "en" ? "Do you ship internationally?" : "¿Realizan envíos internacionales?",
+            question:
+              language === "en"
+                ? "Do you ship internationally?"
+                : "¿Realizan envíos internacionales?",
             answer:
               language === "en"
                 ? "Yes, we ship to most countries worldwide. Shipping costs and times vary by location."
                 : "Sí, enviamos a la mayoría de los países del mundo. Los costos y tiempos de envío varían según la ubicación.",
             category: "Shipping",
           },
-        ])
+        ]);
         setProducts([
           {
             name: language === "en" ? "Premium Product" : "Producto Premium",
@@ -378,17 +458,20 @@ export default function CreateBotPage() {
             available: true,
             stock: "120",
           },
-        ])
+        ]);
         setBusinessDescription(
           language === "en"
             ? "We are an e-commerce store offering high-quality products for home and office. Our selection includes electronics, furniture, and accessories, all carefully curated for quality and design."
-            : "Somos una tienda de comercio electrónico que ofrece productos de alta calidad para el hogar y la oficina. Nuestra selección incluye electrónica, muebles y accesorios, todos cuidadosamente seleccionados por su calidad y diseño.",
-        )
-        break
+            : "Somos una tienda de comercio electrónico que ofrece productos de alta calidad para el hogar y la oficina. Nuestra selección incluye electrónica, muebles y accesorios, todos cuidadosamente seleccionados por su calidad y diseño."
+        );
+        break;
       case "customerSupport":
         setFaqs([
           {
-            question: language === "en" ? "How do I reset my password?" : "¿Cómo restablezco mi contraseña?",
+            question:
+              language === "en"
+                ? "How do I reset my password?"
+                : "¿Cómo restablezco mi contraseña?",
             answer:
               language === "en"
                 ? "You can reset your password by clicking on the 'Forgot Password' link on the login page."
@@ -397,7 +480,9 @@ export default function CreateBotPage() {
           },
           {
             question:
-              language === "en" ? "How do I contact customer support?" : "¿Cómo contacto al soporte al cliente?",
+              language === "en"
+                ? "How do I contact customer support?"
+                : "¿Cómo contacto al soporte al cliente?",
             answer:
               language === "en"
                 ? "You can reach our customer support team via email, phone, or live chat on our website."
@@ -405,14 +490,17 @@ export default function CreateBotPage() {
             category: "Support",
           },
           {
-            question: language === "en" ? "What are your business hours?" : "¿Cuáles son sus horarios de atención?",
+            question:
+              language === "en"
+                ? "What are your business hours?"
+                : "¿Cuáles son sus horarios de atención?",
             answer:
               language === "en"
                 ? "Our support team is available Monday to Friday, 9am to 6pm EST."
                 : "Nuestro equipo de soporte está disponible de lunes a viernes, de 9 am a 6 pm EST.",
             category: "General",
           },
-        ])
+        ]);
         setProducts([
           {
             name: language === "en" ? "Premium Support" : "Soporte Premium",
@@ -432,18 +520,20 @@ export default function CreateBotPage() {
                 : "Soporte estándar durante horario comercial.",
             available: true,
           },
-        ])
+        ]);
         setBusinessDescription(
           language === "en"
             ? "We provide customer support services for a wide range of software products. Our team of experts is trained to help users troubleshoot issues, answer questions, and provide guidance on product features."
-            : "Proporcionamos servicios de atención al cliente para una amplia gama de productos de software. Nuestro equipo de expertos está capacitado para ayudar a los usuarios a solucionar problemas, responder preguntas y proporcionar orientación sobre las características del producto.",
-        )
-        break
+            : "Proporcionamos servicios de atención al cliente para una amplia gama de productos de software. Nuestro equipo de expertos está capacitado para ayudar a los usuarios a solucionar problemas, responder preguntas y proporcionar orientación sobre las características del producto."
+        );
+        break;
       case "realEstate":
         setFaqs([
           {
             question:
-              language === "en" ? "What properties do you have available?" : "¿Qué propiedades tienen disponibles?",
+              language === "en"
+                ? "What properties do you have available?"
+                : "¿Qué propiedades tienen disponibles?",
             answer:
               language === "en"
                 ? "We have a variety of properties including apartments, houses, and commercial spaces. You can view our current listings on our website."
@@ -451,7 +541,10 @@ export default function CreateBotPage() {
             category: "Properties",
           },
           {
-            question: language === "en" ? "How do I schedule a viewing?" : "¿Cómo programo una visita?",
+            question:
+              language === "en"
+                ? "How do I schedule a viewing?"
+                : "¿Cómo programo una visita?",
             answer:
               language === "en"
                 ? "You can schedule a viewing by contacting our office or using the booking form on our website."
@@ -469,10 +562,11 @@ export default function CreateBotPage() {
                 : "Por lo general, necesitará identificación, comprobante de ingresos, referencias y un depósito de seguridad.",
             category: "Rentals",
           },
-        ])
+        ]);
         setProducts([
           {
-            name: language === "en" ? "Luxury Apartment" : "Apartamento de Lujo",
+            name:
+              language === "en" ? "Luxury Apartment" : "Apartamento de Lujo",
             price: "$2,500/month",
             description:
               language === "en"
@@ -491,17 +585,20 @@ export default function CreateBotPage() {
             available: true,
             stock: "1",
           },
-        ])
+        ]);
         setBusinessDescription(
           language === "en"
             ? "We are a real estate agency specializing in residential and commercial properties. Our team of experienced agents helps clients find their perfect home or investment property, with a focus on premium locations and excellent customer service."
-            : "Somos una agencia inmobiliaria especializada en propiedades residenciales y comerciales. Nuestro equipo de agentes experimentados ayuda a los clientes a encontrar su hogar perfecto o propiedad de inversión, con un enfoque en ubicaciones premium y excelente servicio al cliente.",
-        )
-        break
+            : "Somos una agencia inmobiliaria especializada en propiedades residenciales y comerciales. Nuestro equipo de agentes experimentados ayuda a los clientes a encontrar su hogar perfecto o propiedad de inversión, con un enfoque en ubicaciones premium y excelente servicio al cliente."
+        );
+        break;
       case "appointments":
         setFaqs([
           {
-            question: language === "en" ? "How do I book an appointment?" : "¿Cómo reservo una cita?",
+            question:
+              language === "en"
+                ? "How do I book an appointment?"
+                : "¿Cómo reservo una cita?",
             answer:
               language === "en"
                 ? "You can book an appointment through our website, mobile app, or by calling our office."
@@ -509,7 +606,10 @@ export default function CreateBotPage() {
             category: "Booking",
           },
           {
-            question: language === "en" ? "How do I cancel or reschedule?" : "¿Cómo cancelo o reprogramo?",
+            question:
+              language === "en"
+                ? "How do I cancel or reschedule?"
+                : "¿Cómo cancelo o reprogramo?",
             answer:
               language === "en"
                 ? "You can cancel or reschedule your appointment up to 24 hours in advance through your account or by contacting us."
@@ -517,17 +617,21 @@ export default function CreateBotPage() {
             category: "Booking",
           },
           {
-            question: language === "en" ? "What should I bring to my appointment?" : "¿Qué debo llevar a mi cita?",
+            question:
+              language === "en"
+                ? "What should I bring to my appointment?"
+                : "¿Qué debo llevar a mi cita?",
             answer:
               language === "en"
                 ? "Please bring your ID, insurance information (if applicable), and any relevant medical records or referrals."
                 : "Por favor traiga su identificación, información del seguro (si corresponde) y cualquier registro médico o referencia relevante.",
             category: "Preparation",
           },
-        ])
+        ]);
         setProducts([
           {
-            name: language === "en" ? "Standard Consultation" : "Consulta Estándar",
+            name:
+              language === "en" ? "Standard Consultation" : "Consulta Estándar",
             price: "$75",
             description:
               language === "en"
@@ -537,7 +641,10 @@ export default function CreateBotPage() {
             stock: "15",
           },
           {
-            name: language === "en" ? "Comprehensive Assessment" : "Evaluación Integral",
+            name:
+              language === "en"
+                ? "Comprehensive Assessment"
+                : "Evaluación Integral",
             price: "$150",
             description:
               language === "en"
@@ -546,22 +653,22 @@ export default function CreateBotPage() {
             available: true,
             stock: "8",
           },
-        ])
+        ]);
         setBusinessDescription(
           language === "en"
             ? "We are a healthcare clinic offering a range of medical and wellness services. Our team of professionals includes doctors, therapists, and specialists who provide personalized care for all patients. We focus on preventive care and holistic treatment approaches."
-            : "Somos una clínica de salud que ofrece una variedad de servicios médicos y de bienestar. Nuestro equipo de profesionales incluye médicos, terapeutas y especialistas que brindan atención personalizada a todos los pacientes. Nos enfocamos en la atención preventiva y enfoques de tratamiento holísticos.",
-        )
-        break
+            : "Somos una clínica de salud que ofrece una variedad de servicios médicos y de bienestar. Nuestro equipo de profesionales incluye médicos, terapeutas y especialistas que brindan atención personalizada a todos los pacientes. Nos enfocamos en la atención preventiva y enfoques de tratamiento holísticos."
+        );
+        break;
       default:
         // Mantener los valores predeterminados
-        break
+        break;
     }
-  }
+  };
 
   // Add default themes for chat customization
   // Add this after the chatSettings state:
-  const [selectedTheme, setSelectedTheme] = useState("default")
+  const [selectedTheme, setSelectedTheme] = useState("default");
 
   const chatThemes = {
     default: {
@@ -609,32 +716,37 @@ export default function CreateBotPage() {
       userBubbleColor: "#ffedd5",
       headerStyle: "gradient" as "gradient" | "solid",
     },
-  }
+  };
 
   // Add a function to apply theme
   const applyTheme = (theme: string) => {
-    setSelectedTheme(theme)
-    const themeSettings = chatThemes[theme as keyof typeof chatThemes]
+    setSelectedTheme(theme);
+    const themeSettings = chatThemes[theme as keyof typeof chatThemes];
     setChatSettings({
       ...chatSettings,
       ...themeSettings,
-    })
-  }
+    });
+  };
 
   const handleAddFunction = (functionData: any) => {
-    setFunctions([...functions, functionData])
-  }
+    setFunctions([...functions, functionData]);
+  };
 
   const handleRemoveFunction = (index: number) => {
-    const updatedFunctions = functions.filter((_, i) => i !== index)
-    setFunctions(updatedFunctions)
-  }
+    const updatedFunctions = functions.filter((_, i) => i !== index);
+    setFunctions(updatedFunctions);
+  };
 
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-4 p-2 sm:p-4 md:gap-8 md:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-          <Button variant="outline" size="icon" onClick={() => router.back()} type="button">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => router.back()}
+            type="button"
+          >
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Back</span>
           </Button>
@@ -652,14 +764,22 @@ export default function CreateBotPage() {
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">{language === "en" ? "Total Tokens:" : "Tokens Totales:"}</span>
+            <span className="text-sm font-medium">
+              {language === "en" ? "Total Tokens:" : "Tokens Totales:"}
+            </span>
             <TokenCounter count={totalTokens} />
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{language === "en" ? "Active Bots:" : "Bots Activos:"}</span>
+              <span className="text-sm font-medium">
+                {language === "en" ? "Active Bots:" : "Bots Activos:"}
+              </span>
               <Badge
-                variant={activeBots >= planLimits[userPlan as keyof typeof planLimits] ? "destructive" : "default"}
+                variant={
+                  activeBots >= planLimits[userPlan as keyof typeof planLimits]
+                    ? "destructive"
+                    : "default"
+                }
               >
                 {activeBots}/{planLimits[userPlan as keyof typeof planLimits]}
               </Badge>
@@ -673,31 +793,45 @@ export default function CreateBotPage() {
         <form onSubmit={handleSubmit}>
           <Card className="mb-4">
             <CardHeader>
-              <CardTitle>{language === "en" ? "Bot Information" : "Información del Bot"}</CardTitle>
+              <CardTitle>
+                {language === "en" ? "Bot Information" : "Información del Bot"}
+              </CardTitle>
               <CardDescription>
-                {language === "en" ? "Basic information about your chatbot." : "Información básica sobre su chatbot."}
+                {language === "en"
+                  ? "Basic information about your chatbot."
+                  : "Información básica sobre su chatbot."}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="bot-name">{language === "en" ? "Bot Name" : "Nombre del Bot"}</Label>
+                <Label htmlFor="bot-name">
+                  {language === "en" ? "Bot Name" : "Nombre del Bot"}
+                </Label>
                 <Input
                   id="bot-name"
                   name="bot-name"
-                  placeholder={language === "en" ? "e.g., Support Assistant" : "ej., Asistente de Soporte"}
+                  placeholder={
+                    language === "en"
+                      ? "e.g., Support Assistant"
+                      : "ej., Asistente de Soporte"
+                  }
                   required
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="bot-description">{language === "en" ? "Description" : "Descripción"}</Label>
+                  <Label htmlFor="bot-description">
+                    {language === "en" ? "Description" : "Descripción"}
+                  </Label>
                   <TokenCounter count={descriptionTokens} />
                 </div>
                 <Textarea
                   id="bot-description"
                   name="bot-description"
                   placeholder={
-                    language === "en" ? "Describe what this bot will do..." : "Describa lo que hará este bot..."
+                    language === "en"
+                      ? "Describe what this bot will do..."
+                      : "Describa lo que hará este bot..."
                   }
                   className="min-h-[100px]"
                   value={description}
@@ -712,7 +846,11 @@ export default function CreateBotPage() {
                   onValueChange={(value) => setBotType(value)}
                 >
                   <div>
-                    <RadioGroupItem value="web" id="web" className="peer sr-only" />
+                    <RadioGroupItem
+                      value="web"
+                      id="web"
+                      className="peer sr-only"
+                    />
                     <Label
                       htmlFor="web"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -722,7 +860,11 @@ export default function CreateBotPage() {
                     </Label>
                   </div>
                   <div>
-                    <RadioGroupItem value="whatsapp" id="whatsapp" className="peer sr-only" />
+                    <RadioGroupItem
+                      value="whatsapp"
+                      id="whatsapp"
+                      className="peer sr-only"
+                    />
                     <Label
                       htmlFor="whatsapp"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -734,8 +876,14 @@ export default function CreateBotPage() {
                 </RadioGroup>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="use-case">{language === "en" ? "Use Case" : "Caso de Uso"}</Label>
-                <UseCaseSelector value={useCase} onChange={loadUseCaseTemplate} language={language as "en" | "es"} />
+                <Label htmlFor="use-case">
+                  {language === "en" ? "Use Case" : "Caso de Uso"}
+                </Label>
+                <UseCaseSelector
+                  value={useCase}
+                  onChange={loadUseCaseTemplate}
+                  language={language as "en" | "es"}
+                />
                 <p className="text-sm text-muted-foreground mt-1">
                   {language === "en"
                     ? "Select a use case to load pre-configured templates for your bot."
@@ -789,7 +937,11 @@ export default function CreateBotPage() {
             <TabsContent value="basic" className="space-y-4 pt-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>{language === "en" ? "Basic Settings" : "Configuración Básica"}</CardTitle>
+                  <CardTitle>
+                    {language === "en"
+                      ? "Basic Settings"
+                      : "Configuración Básica"}
+                  </CardTitle>
                   <CardDescription>
                     {language === "en"
                       ? "Configure the basic settings for your chatbot."
@@ -800,7 +952,9 @@ export default function CreateBotPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="welcome-message">
-                        {language === "en" ? "Welcome Message" : "Mensaje de Bienvenida"}
+                        {language === "en"
+                          ? "Welcome Message"
+                          : "Mensaje de Bienvenida"}
                       </Label>
                       <TokenCounter count={welcomeMessageTokens} />
                     </div>
@@ -808,7 +962,9 @@ export default function CreateBotPage() {
                       id="welcome-message"
                       name="welcome-message"
                       placeholder={
-                        language === "en" ? "Hello! How can I help you today?" : "¡Hola! ¿Cómo puedo ayudarte hoy?"
+                        language === "en"
+                          ? "Hello! How can I help you today?"
+                          : "¡Hola! ¿Cómo puedo ayudarte hoy?"
                       }
                       className="min-h-[100px]"
                       value={welcomeMessage}
@@ -818,15 +974,24 @@ export default function CreateBotPage() {
                   {botType === "whatsapp" && (
                     <div className="space-y-2">
                       <Label htmlFor="whatsapp-number">
-                        {language === "en" ? "WhatsApp Business Number" : "Número de WhatsApp Business"}
+                        {language === "en"
+                          ? "WhatsApp Business Number"
+                          : "Número de WhatsApp Business"}
                       </Label>
                       <Input id="whatsapp-number" placeholder="+1234567890" />
                     </div>
                   )}
                   <div className="space-y-2">
-                    <Label htmlFor="primary-color">{language === "en" ? "Primary Color" : "Color Primario"}</Label>
+                    <Label htmlFor="primary-color">
+                      {language === "en" ? "Primary Color" : "Color Primario"}
+                    </Label>
                     <div className="flex gap-2">
-                      <Input id="primary-color" type="color" defaultValue="#4f46e5" className="w-12 h-10 p-1" />
+                      <Input
+                        id="primary-color"
+                        type="color"
+                        defaultValue="#4f46e5"
+                        className="w-12 h-10 p-1"
+                      />
                       <Input
                         id="primary-color-hex"
                         name="primary-color-hex"
@@ -843,7 +1008,9 @@ export default function CreateBotPage() {
               <Card>
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                   <div>
-                    <CardTitle>{language === "en" ? "FAQs" : "Preguntas Frecuentes"}</CardTitle>
+                    <CardTitle>
+                      {language === "en" ? "FAQs" : "Preguntas Frecuentes"}
+                    </CardTitle>
                     <CardDescription>
                       {language === "en"
                         ? "Add questions and answers that your chatbot will respond to."
@@ -851,7 +1018,11 @@ export default function CreateBotPage() {
                     </CardDescription>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <Button onClick={handleAddFaq} className="gap-1 w-full sm:w-auto" type="button">
+                    <Button
+                      onClick={handleAddFaq}
+                      className="gap-1 w-full sm:w-auto"
+                      type="button"
+                    >
                       <Plus className="h-4 w-4" />
                       {language === "en" ? "Add FAQ" : "Agregar FAQ"}
                     </Button>
@@ -870,7 +1041,9 @@ export default function CreateBotPage() {
                       ) : (
                         <>
                           <Sparkles className="h-4 w-4" />
-                          {language === "en" ? "Generate FAQs" : "Generar Preguntas"}
+                          {language === "en"
+                            ? "Generate FAQs"
+                            : "Generar Preguntas"}
                         </>
                       )}
                     </Button>
@@ -879,7 +1052,9 @@ export default function CreateBotPage() {
                 <CardContent>
                   <div className="space-y-4 mb-6">
                     <Label htmlFor="business-description">
-                      {language === "en" ? "Business Description" : "Descripción del Negocio"}
+                      {language === "en"
+                        ? "Business Description"
+                        : "Descripción del Negocio"}
                     </Label>
                     <Textarea
                       id="business-description"
@@ -900,29 +1075,42 @@ export default function CreateBotPage() {
                   </div>
 
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-medium">{language === "en" ? "FAQ Tokens:" : "Tokens de FAQ:"}</span>
+                    <span className="text-sm font-medium">
+                      {language === "en" ? "FAQ Tokens:" : "Tokens de FAQ:"}
+                    </span>
                     <TokenCounter count={faqTokens} />
                   </div>
 
                   <Accordion type="multiple" className="space-y-4">
                     {faqs.map((faq, index) => (
-                      <AccordionItem key={index} value={`faq-${index}`} className="border rounded-md p-2">
+                      <AccordionItem
+                        key={index}
+                        value={`faq-${index}`}
+                        className="border rounded-md p-2"
+                      >
                         <div className="flex items-center justify-between">
                           <AccordionTrigger className="hover:no-underline flex-1 text-left">
-                            {faq.question || (language === "en" ? "New FAQ Item" : "Nuevo elemento de FAQ")}
+                            {faq.question ||
+                              (language === "en"
+                                ? "New FAQ Item"
+                                : "Nuevo elemento de FAQ")}
                           </AccordionTrigger>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={(e) => {
-                              e.stopPropagation()
-                              handleRemoveFaq(index)
+                              e.stopPropagation();
+                              handleRemoveFaq(index);
                             }}
                             className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                             type="button"
                           >
                             <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">{language === "en" ? "Remove FAQ" : "Eliminar FAQ"}</span>
+                            <span className="sr-only">
+                              {language === "en"
+                                ? "Remove FAQ"
+                                : "Eliminar FAQ"}
+                            </span>
                           </Button>
                         </div>
                         <AccordionContent className="space-y-4 pt-2">
@@ -932,23 +1120,45 @@ export default function CreateBotPage() {
                             </Label>
                             <Select
                               value={faq.category}
-                              onValueChange={(value) => handleUpdateFaq(index, "category", value)}
+                              onValueChange={(value) =>
+                                handleUpdateFaq(index, "category", value)
+                              }
                             >
                               <SelectTrigger id={`faq-category-${index}`}>
                                 <SelectValue
-                                  placeholder={language === "en" ? "Select category" : "Seleccionar categoría"}
+                                  placeholder={
+                                    language === "en"
+                                      ? "Select category"
+                                      : "Seleccionar categoría"
+                                  }
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="General">{language === "en" ? "General" : "General"}</SelectItem>
-                                <SelectItem value="Account">{language === "en" ? "Account" : "Cuenta"}</SelectItem>
-                                <SelectItem value="Billing">{language === "en" ? "Billing" : "Facturación"}</SelectItem>
-                                <SelectItem value="Products">{language === "en" ? "Products" : "Productos"}</SelectItem>
-                                <SelectItem value="Shipping">{language === "en" ? "Shipping" : "Envío"}</SelectItem>
-                                <SelectItem value="Returns">
-                                  {language === "en" ? "Returns" : "Devoluciones"}
+                                <SelectItem value="General">
+                                  {language === "en" ? "General" : "General"}
                                 </SelectItem>
-                                <SelectItem value="Support">{language === "en" ? "Support" : "Soporte"}</SelectItem>
+                                <SelectItem value="Account">
+                                  {language === "en" ? "Account" : "Cuenta"}
+                                </SelectItem>
+                                <SelectItem value="Billing">
+                                  {language === "en"
+                                    ? "Billing"
+                                    : "Facturación"}
+                                </SelectItem>
+                                <SelectItem value="Products">
+                                  {language === "en" ? "Products" : "Productos"}
+                                </SelectItem>
+                                <SelectItem value="Shipping">
+                                  {language === "en" ? "Shipping" : "Envío"}
+                                </SelectItem>
+                                <SelectItem value="Returns">
+                                  {language === "en"
+                                    ? "Returns"
+                                    : "Devoluciones"}
+                                </SelectItem>
+                                <SelectItem value="Support">
+                                  {language === "en" ? "Support" : "Soporte"}
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -959,7 +1169,13 @@ export default function CreateBotPage() {
                             <Input
                               id={`faq-question-${index}`}
                               value={faq.question}
-                              onChange={(e) => handleUpdateFaq(index, "question", e.target.value)}
+                              onChange={(e) =>
+                                handleUpdateFaq(
+                                  index,
+                                  "question",
+                                  e.target.value
+                                )
+                              }
                               placeholder={
                                 language === "en"
                                   ? "What are your business hours?"
@@ -968,11 +1184,15 @@ export default function CreateBotPage() {
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor={`faq-answer-${index}`}>{language === "en" ? "Answer" : "Respuesta"}</Label>
+                            <Label htmlFor={`faq-answer-${index}`}>
+                              {language === "en" ? "Answer" : "Respuesta"}
+                            </Label>
                             <Textarea
                               id={`faq-answer-${index}`}
                               value={faq.answer}
-                              onChange={(e) => handleUpdateFaq(index, "answer", e.target.value)}
+                              onChange={(e) =>
+                                handleUpdateFaq(index, "answer", e.target.value)
+                              }
                               placeholder={
                                 language === "en"
                                   ? "Our business hours are Monday to Friday, 9am to 5pm."
@@ -988,11 +1208,20 @@ export default function CreateBotPage() {
                   {faqs.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-8 text-center">
                       <p className="text-muted-foreground">
-                        {language === "en" ? "No FAQs added yet." : "Aún no se han agregado preguntas frecuentes."}
+                        {language === "en"
+                          ? "No FAQs added yet."
+                          : "Aún no se han agregado preguntas frecuentes."}
                       </p>
-                      <Button onClick={handleAddFaq} variant="outline" className="mt-4 gap-1" type="button">
+                      <Button
+                        onClick={handleAddFaq}
+                        variant="outline"
+                        className="mt-4 gap-1"
+                        type="button"
+                      >
                         <Plus className="h-4 w-4" />
-                        {language === "en" ? "Add Your First FAQ" : "Agregue su primera pregunta frecuente"}
+                        {language === "en"
+                          ? "Add Your First FAQ"
+                          : "Agregue su primera pregunta frecuente"}
                       </Button>
                     </div>
                   )}
@@ -1003,9 +1232,13 @@ export default function CreateBotPage() {
             <TabsContent value="products-services" className="space-y-4 pt-4">
               <Tabs defaultValue="products" className="space-y-4">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="products">{language === "en" ? "Products" : "Productos"}</TabsTrigger>
+                  <TabsTrigger value="products">
+                    {language === "en" ? "Products" : "Productos"}
+                  </TabsTrigger>
                   <TabsTrigger value="services">
-                    {language === "en" ? "Services & Functions" : "Servicios y Funciones"}
+                    {language === "en"
+                      ? "Services & Functions"
+                      : "Servicios y Funciones"}
                   </TabsTrigger>
                 </TabsList>
 
@@ -1013,7 +1246,9 @@ export default function CreateBotPage() {
                   <Card>
                     <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                       <div>
-                        <CardTitle>{language === "en" ? "Products" : "Productos"}</CardTitle>
+                        <CardTitle>
+                          {language === "en" ? "Products" : "Productos"}
+                        </CardTitle>
                         <CardDescription>
                           {language === "en"
                             ? "Add products that your chatbot can recommend."
@@ -1032,7 +1267,9 @@ export default function CreateBotPage() {
                     <CardContent>
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-sm font-medium">
-                          {language === "en" ? "Product Tokens:" : "Tokens de Productos:"}
+                          {language === "en"
+                            ? "Product Tokens:"
+                            : "Tokens de Productos:"}
                         </span>
                         <TokenCounter count={productTokens} />
                       </div>
@@ -1040,15 +1277,21 @@ export default function CreateBotPage() {
                       {apiProducts.length > 0 && (
                         <div className="mb-6 p-4 border rounded-md bg-muted/30">
                           <h4 className="font-medium mb-2">
-                            {language === "en" ? "API Products" : "Productos vía API"}
+                            {language === "en"
+                              ? "API Products"
+                              : "Productos vía API"}
                           </h4>
                           {apiProducts.map((api, index) => (
                             <div
                               key={index}
                               className="flex items-center justify-between text-sm p-2 border-b last:border-0"
                             >
-                              <span className="truncate max-w-[70%]">{api.apiUrl}</span>
-                              <Badge variant="outline">{language === "en" ? "Connected" : "Conectado"}</Badge>
+                              <span className="truncate max-w-[70%]">
+                                {api.apiUrl}
+                              </span>
+                              <Badge variant="outline">
+                                {language === "en" ? "Connected" : "Conectado"}
+                              </Badge>
                             </div>
                           ))}
                         </div>
@@ -1056,28 +1299,38 @@ export default function CreateBotPage() {
 
                       <Accordion type="multiple" className="space-y-4">
                         {products.map((product, index) => (
-                          <AccordionItem key={index} value={`product-${index}`} className="border rounded-md p-2">
+                          <AccordionItem
+                            key={index}
+                            value={`product-${index}`}
+                            className="border rounded-md p-2"
+                          >
                             <div className="flex items-center justify-between">
                               <AccordionTrigger className="hover:no-underline flex-1 text-left">
                                 <div className="truncate">
-                                  {product.name || (language === "en" ? "New Product" : "Nuevo Producto")}
+                                  {product.name ||
+                                    (language === "en"
+                                      ? "New Product"
+                                      : "Nuevo Producto")}
                                   {product.price && ` - ${product.price}`}
-                                  {product.stock && ` (Stock: ${product.stock})`}
+                                  {product.stock &&
+                                    ` (Stock: ${product.stock})`}
                                 </div>
                               </AccordionTrigger>
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleRemoveProduct(index)
+                                  e.stopPropagation();
+                                  handleRemoveProduct(index);
                                 }}
                                 className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                                 type="button"
                               >
                                 <Trash2 className="h-4 w-4" />
                                 <span className="sr-only">
-                                  {language === "en" ? "Remove Product" : "Eliminar Producto"}
+                                  {language === "en"
+                                    ? "Remove Product"
+                                    : "Eliminar Producto"}
                                 </span>
                               </Button>
                             </div>
@@ -1085,17 +1338,26 @@ export default function CreateBotPage() {
                               <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
                                   <Label htmlFor={`product-name-${index}`}>
-                                    {language === "en" ? "Product Name" : "Nombre del Producto"}
+                                    {language === "en"
+                                      ? "Product Name"
+                                      : "Nombre del Producto"}
                                   </Label>
                                   <Input
                                     id={`product-name-${index}`}
                                     value={product.name}
                                     onChange={(e) => {
-                                      const updatedProducts = [...products]
-                                      updatedProducts[index] = { ...updatedProducts[index], name: e.target.value }
-                                      setProducts(updatedProducts)
+                                      const updatedProducts = [...products];
+                                      updatedProducts[index] = {
+                                        ...updatedProducts[index],
+                                        name: e.target.value,
+                                      };
+                                      setProducts(updatedProducts);
                                     }}
-                                    placeholder={language === "en" ? "Premium Plan" : "Plan Premium"}
+                                    placeholder={
+                                      language === "en"
+                                        ? "Premium Plan"
+                                        : "Plan Premium"
+                                    }
                                   />
                                 </div>
                                 <div className="space-y-2">
@@ -1106,9 +1368,12 @@ export default function CreateBotPage() {
                                     id={`product-price-${index}`}
                                     value={product.price}
                                     onChange={(e) => {
-                                      const updatedProducts = [...products]
-                                      updatedProducts[index] = { ...updatedProducts[index], price: e.target.value }
-                                      setProducts(updatedProducts)
+                                      const updatedProducts = [...products];
+                                      updatedProducts[index] = {
+                                        ...updatedProducts[index],
+                                        price: e.target.value,
+                                      };
+                                      setProducts(updatedProducts);
                                     }}
                                     placeholder="$99.99"
                                   />
@@ -1116,15 +1381,20 @@ export default function CreateBotPage() {
                               </div>
                               <div className="space-y-2">
                                 <Label htmlFor={`product-description-${index}`}>
-                                  {language === "en" ? "Description" : "Descripción"}
+                                  {language === "en"
+                                    ? "Description"
+                                    : "Descripción"}
                                 </Label>
                                 <Textarea
                                   id={`product-description-${index}`}
                                   value={product.description}
                                   onChange={(e) => {
-                                    const updatedProducts = [...products]
-                                    updatedProducts[index] = { ...updatedProducts[index], description: e.target.value }
-                                    setProducts(updatedProducts)
+                                    const updatedProducts = [...products];
+                                    updatedProducts[index] = {
+                                      ...updatedProducts[index],
+                                      description: e.target.value,
+                                    };
+                                    setProducts(updatedProducts);
                                   }}
                                   placeholder={
                                     language === "en"
@@ -1140,18 +1410,25 @@ export default function CreateBotPage() {
                                     id={`product-available-${index}`}
                                     checked={product.available}
                                     onCheckedChange={(checked) => {
-                                      const updatedProducts = [...products]
-                                      updatedProducts[index] = { ...updatedProducts[index], available: checked }
-                                      setProducts(updatedProducts)
+                                      const updatedProducts = [...products];
+                                      updatedProducts[index] = {
+                                        ...updatedProducts[index],
+                                        available: checked,
+                                      };
+                                      setProducts(updatedProducts);
                                     }}
                                   />
                                   <Label htmlFor={`product-available-${index}`}>
-                                    {language === "en" ? "Available" : "Disponible"}
+                                    {language === "en"
+                                      ? "Available"
+                                      : "Disponible"}
                                   </Label>
                                 </div>
                                 <div className="space-y-2">
                                   <Label htmlFor={`product-stock-${index}`}>
-                                    {language === "en" ? "Stock (Optional)" : "Stock (Opcional)"}
+                                    {language === "en"
+                                      ? "Stock (Optional)"
+                                      : "Stock (Opcional)"}
                                   </Label>
                                   <Input
                                     id={`product-stock-${index}`}
@@ -1159,9 +1436,12 @@ export default function CreateBotPage() {
                                     min="0"
                                     value={product.stock || ""}
                                     onChange={(e) => {
-                                      const updatedProducts = [...products]
-                                      updatedProducts[index] = { ...updatedProducts[index], stock: e.target.value }
-                                      setProducts(updatedProducts)
+                                      const updatedProducts = [...products];
+                                      updatedProducts[index] = {
+                                        ...updatedProducts[index],
+                                        stock: e.target.value,
+                                      };
+                                      setProducts(updatedProducts);
                                     }}
                                     placeholder="0"
                                   />
@@ -1174,7 +1454,9 @@ export default function CreateBotPage() {
                       {products.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-8 text-center">
                           <p className="text-muted-foreground">
-                            {language === "en" ? "No products added yet." : "Aún no se han agregado productos."}
+                            {language === "en"
+                              ? "No products added yet."
+                              : "Aún no se han agregado productos."}
                           </p>
                           <Button
                             onClick={() => setIsProductModalOpen(true)}
@@ -1183,7 +1465,9 @@ export default function CreateBotPage() {
                             type="button"
                           >
                             <Plus className="h-4 w-4" />
-                            {language === "en" ? "Add Your First Product" : "Agregue su primer producto"}
+                            {language === "en"
+                              ? "Add Your First Product"
+                              : "Agregue su primer producto"}
                           </Button>
                         </div>
                       )}
@@ -1192,11 +1476,14 @@ export default function CreateBotPage() {
                 </TabsContent>
 
                 <TabsContent value="services">
+                  <SimpleAlert message="Se requiere experiencia técnica en APIs e integración de apps para administrar esta sección." />
                   <Card>
                     <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                       <div>
                         <CardTitle>
-                          {language === "en" ? "Bot Functions & Services" : "Funciones y Servicios del Bot"}
+                          {language === "en"
+                            ? "Bot Functions & Services"
+                            : "Funciones y Servicios del Bot"}
                         </CardTitle>
                         <CardDescription>
                           {language === "en"
@@ -1218,67 +1505,106 @@ export default function CreateBotPage() {
                         {functions.length > 0 ? (
                           <Accordion type="multiple" className="space-y-4">
                             {functions.map((func, index) => (
-                              <AccordionItem key={index} value={`function-${index}`} className="border rounded-md p-2">
+                              <AccordionItem
+                                key={index}
+                                value={`function-${index}`}
+                                className="border rounded-md p-2"
+                              >
                                 <div className="flex items-center justify-between">
                                   <AccordionTrigger className="hover:no-underline flex-1 text-left">
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                      <Badge variant={func.type === "api" ? "default" : "secondary"}>
+                                      <Badge
+                                        variant={
+                                          func.type === "api"
+                                            ? "default"
+                                            : "secondary"
+                                        }
+                                      >
                                         {func.type === "api" ? "API" : "Custom"}
                                       </Badge>
-                                      <span className="truncate">{func.name}</span>
+                                      <span className="truncate">
+                                        {func.name}
+                                      </span>
                                     </div>
                                   </AccordionTrigger>
                                   <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={(e) => {
-                                      e.stopPropagation()
-                                      handleRemoveFunction(index)
+                                      e.stopPropagation();
+                                      handleRemoveFunction(index);
                                     }}
                                     className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                                     type="button"
                                   >
                                     <Trash2 className="h-4 w-4" />
                                     <span className="sr-only">
-                                      {language === "en" ? "Remove Function" : "Eliminar Función"}
+                                      {language === "en"
+                                        ? "Remove Function"
+                                        : "Eliminar Función"}
                                     </span>
                                   </Button>
                                 </div>
                                 <AccordionContent className="space-y-4 pt-2">
                                   <div className="space-y-2">
-                                    <p className="text-sm text-muted-foreground">{func.description}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                      {func.description}
+                                    </p>
                                     {func.type === "api" && func.api && (
                                       <div className="space-y-2">
                                         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                          <Badge variant="outline">{func.api.method}</Badge>
+                                          <Badge variant="outline">
+                                            {func.api.method}
+                                          </Badge>
                                           <code className="text-xs bg-muted px-2 py-1 rounded break-all">
                                             {func.api.url}
                                           </code>
                                         </div>
-                                        {func.api.parameters && func.api.parameters.length > 0 && (
-                                          <div>
-                                            <p className="text-sm font-medium mb-1">
-                                              {language === "en" ? "Parameters:" : "Parámetros:"}
-                                            </p>
-                                            <div className="flex flex-wrap gap-1">
-                                              {func.api.parameters.map((param, paramIndex) => (
-                                                <Badge key={paramIndex} variant="outline" className="text-xs">
-                                                  {param.name} ({param.type}){param.required && "*"}
-                                                </Badge>
-                                              ))}
+                                        {func.api.parameters &&
+                                          func.api.parameters.length > 0 && (
+                                            <div>
+                                              <p className="text-sm font-medium mb-1">
+                                                {language === "en"
+                                                  ? "Parameters:"
+                                                  : "Parámetros:"}
+                                              </p>
+                                              <div className="flex flex-wrap gap-1">
+                                                {func.api.parameters.map(
+                                                  (
+                                                    param: {
+                                                      name: string;
+                                                      type: string;
+                                                      required?: boolean;
+                                                    },
+                                                    paramIndex: number
+                                                  ) => (
+                                                    <Badge
+                                                      key={paramIndex}
+                                                      variant="outline"
+                                                      className="text-xs"
+                                                    >
+                                                      {param.name} ({param.type}
+                                                      ){param.required && "*"}
+                                                    </Badge>
+                                                  )
+                                                )}
+                                              </div>
                                             </div>
-                                          </div>
-                                        )}
+                                          )}
                                       </div>
                                     )}
                                     {func.type === "custom" && (
                                       <div className="bg-muted p-3 rounded-md">
                                         <p className="text-xs font-medium mb-1">
-                                          {language === "en" ? "Custom Code:" : "Código Personalizado:"}
+                                          {language === "en"
+                                            ? "Custom Code:"
+                                            : "Código Personalizado:"}
                                         </p>
                                         <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
                                           {func.code?.substring(0, 200)}
-                                          {func.code && func.code.length > 200 && "..."}
+                                          {func.code &&
+                                            func.code.length > 200 &&
+                                            "..."}
                                         </pre>
                                       </div>
                                     )}
@@ -1290,7 +1616,9 @@ export default function CreateBotPage() {
                         ) : (
                           <div className="flex flex-col items-center justify-center py-8 text-center">
                             <p className="text-muted-foreground">
-                              {language === "en" ? "No functions added yet." : "Aún no se han agregado funciones."}
+                              {language === "en"
+                                ? "No functions added yet."
+                                : "Aún no se han agregado funciones."}
                             </p>
                             <Button
                               onClick={() => setIsFunctionModalOpen(true)}
@@ -1299,7 +1627,9 @@ export default function CreateBotPage() {
                               type="button"
                             >
                               <Plus className="h-4 w-4" />
-                              {language === "en" ? "Add Your First Function" : "Agregue su primera función"}
+                              {language === "en"
+                                ? "Add Your First Function"
+                                : "Agregue su primera función"}
                             </Button>
                           </div>
                         )}
@@ -1311,244 +1641,15 @@ export default function CreateBotPage() {
             </TabsContent>
 
             {botType === "web" && (
-              <TabsContent value="chat-customization" className="space-y-4 pt-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>
-                      {language === "en" ? "Chat Widget Customization" : "Personalización del Widget de Chat"}
-                    </CardTitle>
-                    <CardDescription>
-                      {language === "en"
-                        ? "Customize the appearance of your chat widget for your website."
-                        : "Personaliza la apariencia del widget de chat para tu sitio web."}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid gap-6 md:grid-cols-2">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="theme-selector">
-                            {language === "en" ? "Select Theme" : "Seleccionar Tema"}
-                          </Label>
-                          <Select value={selectedTheme} onValueChange={applyTheme}>
-                            <SelectTrigger id="theme-selector">
-                              <SelectValue placeholder={language === "en" ? "Select a theme" : "Seleccionar un tema"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="default">
-                                {language === "en" ? "Default (Purple)" : "Predeterminado (Morado)"}
-                              </SelectItem>
-                              <SelectItem value="dark">{language === "en" ? "Dark" : "Oscuro"}</SelectItem>
-                              <SelectItem value="light">
-                                {language === "en" ? "Light (Blue)" : "Claro (Azul)"}
-                              </SelectItem>
-                              <SelectItem value="green">{language === "en" ? "Green" : "Verde"}</SelectItem>
-                              <SelectItem value="orange">{language === "en" ? "Orange" : "Naranja"}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <p className="text-xs text-muted-foreground">
-                            {language === "en"
-                              ? "Choose a predefined theme or customize below"
-                              : "Elige un tema predefinido o personaliza a continuación"}
-                          </p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="chat-title">{language === "en" ? "Chat Title" : "Título del Chat"}</Label>
-                          <Input
-                            id="chat-title"
-                            value={chatSettings.title}
-                            onChange={(e) => handleUpdateChatSettings("title", e.target.value)}
-                            placeholder="Support Chat"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="chat-subtitle">
-                            {language === "en" ? "Chat Subtitle" : "Subtítulo del Chat"}
-                          </Label>
-                          <Input
-                            id="chat-subtitle"
-                            value={chatSettings.subtitle}
-                            onChange={(e) => handleUpdateChatSettings("subtitle", e.target.value)}
-                            placeholder="Virtual Assistant"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="initial-message">
-                            {language === "en" ? "Initial Message" : "Mensaje Inicial"}
-                          </Label>
-                          <Textarea
-                            id="initial-message"
-                            value={chatSettings.initialMessage}
-                            onChange={(e) => handleUpdateChatSettings("initialMessage", e.target.value)}
-                            placeholder="Hello! How can I help you today?"
-                            className="min-h-[80px]"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="placeholder-text">
-                            {language === "en" ? "Input Placeholder" : "Placeholder del Input"}
-                          </Label>
-                          <Input
-                            id="placeholder-text"
-                            value={chatSettings.placeholderText}
-                            onChange={(e) => handleUpdateChatSettings("placeholderText", e.target.value)}
-                            placeholder="Type your message..."
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="header-style">
-                            {language === "en" ? "Header Style" : "Estilo del Encabezado"}
-                          </Label>
-                          <Select
-                            value={chatSettings.headerStyle}
-                            onValueChange={(value) => handleUpdateChatSettings("headerStyle", value)}
-                          >
-                            <SelectTrigger id="header-style">
-                              <SelectValue placeholder="Select style" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="gradient">{language === "en" ? "Gradient" : "Degradado"}</SelectItem>
-                              <SelectItem value="solid">
-                                {language === "en" ? "Solid Color" : "Color Sólido"}
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="position">
-                            {language === "en" ? "Widget Position" : "Posición del Widget"}
-                          </Label>
-                          <Select
-                            value={chatSettings.position}
-                            onValueChange={(value) => handleUpdateChatSettings("position", value)}
-                          >
-                            <SelectTrigger id="position">
-                              <SelectValue placeholder="Select position" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="right">
-                                {language === "en" ? "Bottom Right" : "Abajo a la Derecha"}
-                              </SelectItem>
-                              <SelectItem value="left">
-                                {language === "en" ? "Bottom Left" : "Abajo a la Izquierda"}
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <Switch
-                            id="show-logo"
-                            checked={chatSettings.showLogo}
-                            onCheckedChange={(checked) => handleUpdateChatSettings("showLogo", checked)}
-                          />
-                          <Label htmlFor="show-logo">{language === "en" ? "Show Logo" : "Mostrar Logo"}</Label>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="primary-color-chat">
-                            {language === "en" ? "Primary Color" : "Color Primario"}
-                          </Label>
-                          <div className="flex gap-2">
-                            <Input
-                              id="primary-color-chat"
-                              type="color"
-                              value={chatSettings.primaryColor}
-                              className="w-12 h-10 p-1"
-                              onChange={(e) => handleUpdateChatSettings("primaryColor", e.target.value)}
-                            />
-                            <Input
-                              id="primary-color-hex-chat"
-                              value={chatSettings.primaryColor}
-                              className="flex-1"
-                              placeholder="#4f46e5"
-                              onChange={(e) => handleUpdateChatSettings("primaryColor", e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="button-color-chat">
-                            {language === "en" ? "Button Color" : "Color del Botón"}
-                          </Label>
-                          <div className="flex gap-2">
-                            <Input
-                              id="button-color-chat"
-                              type="color"
-                              value={chatSettings.buttonColor}
-                              className="w-12 h-10 p-1"
-                              onChange={(e) => handleUpdateChatSettings("buttonColor", e.target.value)}
-                            />
-                            <Input
-                              id="button-color-hex-chat"
-                              value={chatSettings.buttonColor}
-                              className="flex-1"
-                              placeholder="#4f46e5"
-                              onChange={(e) => handleUpdateChatSettings("buttonColor", e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="bubble-color-chat">
-                            {language === "en" ? "Bot Message Color" : "Color de Mensajes del Bot"}
-                          </Label>
-                          <div className="flex gap-2">
-                            <Input
-                              id="bubble-color-chat"
-                              type="color"
-                              value={chatSettings.bubbleColor}
-                              className="w-12 h-10 p-1"
-                              onChange={(e) => handleUpdateChatSettings("bubbleColor", e.target.value)}
-                            />
-                            <Input
-                              id="bubble-color-hex-chat"
-                              value={chatSettings.bubbleColor}
-                              className="flex-1"
-                              placeholder="#f9fafb"
-                              onChange={(e) => handleUpdateChatSettings("bubbleColor", e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="user-bubble-color-chat">
-                            {language === "en" ? "User Message Color" : "Color de Mensajes del Usuario"}
-                          </Label>
-                          <div className="flex gap-2">
-                            <Input
-                              id="user-bubble-color-chat"
-                              type="color"
-                              value={chatSettings.userBubbleColor}
-                              className="w-12 h-10 p-1"
-                              onChange={(e) => handleUpdateChatSettings("userBubbleColor", e.target.value)}
-                            />
-                            <Input
-                              id="user-bubble-color-hex-chat"
-                              value={chatSettings.userBubbleColor}
-                              className="flex-1"
-                              placeholder="#000000"
-                              onChange={(e) => handleUpdateChatSettings("userBubbleColor", e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="mt-4 border rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
-                          <p className="text-sm font-medium mb-2">{language === "en" ? "Preview" : "Vista previa"}</p>
-                          <ChatWidgetPreview settings={chatSettings} />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <TabsContent
+                value="chat-customization"
+                className="space-y-4 pt-4"
+              >
+                <ChatWidgetCustomization
+                  language={language as "en" | "es"}
+                  chatSettings={chatSettings}
+                  onSettingsChange={setChatSettings}
+                />
               </TabsContent>
             )}
 
@@ -1561,7 +1662,10 @@ export default function CreateBotPage() {
 
           <Button
             type="submit"
-            disabled={isLoading || activeBots >= planLimits[userPlan as keyof typeof planLimits]}
+            disabled={
+              isLoading ||
+              activeBots >= planLimits[userPlan as keyof typeof planLimits]
+            }
             className="w-full"
           >
             {isLoading ? (
@@ -1569,7 +1673,8 @@ export default function CreateBotPage() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 {language === "en" ? "Creating Bot..." : "Creando Bot..."}
               </>
-            ) : activeBots >= planLimits[userPlan as keyof typeof planLimits] ? (
+            ) : activeBots >=
+              planLimits[userPlan as keyof typeof planLimits] ? (
               language === "en" ? (
                 "Bot Limit Reached - Upgrade Plan"
               ) : (
@@ -1583,7 +1688,11 @@ export default function CreateBotPage() {
           </Button>
         </form>
       </div>
-      <ProductModal open={isProductModalOpen} onOpenChange={setIsProductModalOpen} onAddProduct={handleAddProduct} />
+      <ProductModal
+        open={isProductModalOpen}
+        onOpenChange={setIsProductModalOpen}
+        onAddProduct={handleAddProduct}
+      />
       <FunctionModal
         open={isFunctionModalOpen}
         onOpenChange={setIsFunctionModalOpen}
@@ -1591,5 +1700,5 @@ export default function CreateBotPage() {
         language={language as "en" | "es"}
       />
     </DashboardLayout>
-  )
+  );
 }

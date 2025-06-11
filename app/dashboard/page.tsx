@@ -36,7 +36,7 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
             <p className="text-muted-foreground">
-              Welcome back! Here's an overview of your chatbots.
+              Welcome back! Here&apos;s an overview of your chatbots.
             </p>
           </div>
           <Link href="/dashboard/bots/create">
@@ -138,7 +138,7 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
                   <CardDescription>
-                    Your chatbots' activity over the last 30 days.
+                    Your chatbots&apos; activity over the last 30 days.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center">

@@ -24,7 +24,6 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
@@ -40,19 +39,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { TokenCounterCompact } from "@/components/token-counter-compact";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(true);
   const { t, language, setLanguage } = useLanguage();
+  const { data: session } = useSession();
 
   const [tokenUsage, setTokenUsage] = useState({
     input: 1250,
@@ -78,7 +76,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
     window.history.pushState({}, "", newUrl);
   };
-  console.log(session);
 
   const routes = [
     {
@@ -143,7 +140,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 glass-effect border-b border-border/50 px-4 md:px-6">
+      <header className="sticky top-0 z-30 bg-white dark:bg-black flex h-16 items-center gap-4 glass-effect border-b border-border/50 px-4 md:px-6">
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button variant="outline" size="icon" className="mr-2 glass-effect">
@@ -151,21 +148,25 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="w-72 sm:max-w-xs glass-effect text-white"
-          >
-            <SheetHeader>
-              <SheetTitle className="text-white">Menú</SheetTitle>
-            </SheetHeader>
+          <SheetContent side="left" className="w-72 sm:max-w-xs glass-effect">
+            <SheetTitle>Menu</SheetTitle>
             <div className="flex h-full flex-col">
               <div className="flex items-center gap-2 border-b border-border/50 p-4">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
                   <Bot className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="text-lg text-white font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                <span className="text-lg font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                   ChatBot Builder
                 </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-auto"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Close</span>
+                </Button>
               </div>
               <div className="flex-1 overflow-auto py-2">
                 <nav className="grid gap-1 px-2">
@@ -187,32 +188,26 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </nav>
               </div>
               <div className="border-t border-border/50 p-4">
-                <div className="flex items-center gap-3 flex-wrap">
-                  {session?.user?.image && (
-                    <Image
-                      alt="profil"
-                      src={session?.user?.image}
-                      className="mx-auto object-cover rounded-full w-11 h-11"
-                      width={20}
-                      height={20}
-                    />
-                  )}
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <span className="text-sm font-medium truncate">
+                <div className="flex items-center gap-3 rounded-lg px-3 py-2">
+                  <Avatar className="h-9 w-9 ring-2 ring-primary/20">
+                    {session && (
+                      <AvatarImage
+                        src={session?.user?.image ?? undefined}
+                        alt="Avatar"
+                      />
+                    )}
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10">
+                      JD
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">
                       {session?.user?.name}
                     </span>
-                    <span className="text-xs text-muted-foreground truncate">
+                    <span className="text-xs text-muted-foreground">
                       {session?.user?.email}
                     </span>
                   </div>
-                  <Button
-                    onClick={() => signOut()}
-                    size="icon"
-                    className="ml-2 shrink-0 bg-primary"
-                  >
-                    <LogOut className="h-5 w-5 text-white" />
-                    <span className="sr-only">Log out</span>
-                  </Button>
                 </div>
               </div>
             </div>
@@ -338,23 +333,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {session?.user?.image && (
-            <Image
-              alt="profil"
-              src={session?.user?.image}
-              className="mx-auto object-cover rounded-full w-11 h-11"
-              width={20}
-              height={20}
+          <Avatar className="ring-2 ring-primary/20">
+            <AvatarImage
+              src="/placeholder.svg?height=32&width=32"
+              alt="Avatar"
             />
-          )}
+            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10">
+              JD
+            </AvatarFallback>
+          </Avatar>
         </div>
       </header>
       <div className="flex flex-1">
         {/* Navegador lateral mejorado */}
-        <aside className="hidden w-64 border-r border-border/50 bg-background/80 md:block">
+        <aside className="hidden w-64 border-r border-border/50 bg-background/80 md:block md:h-screen md:fixed md:left-0 md:top-0 md:z-20">
           <div className="flex h-full flex-col">
-            <div className="flex-1 overflow-auto py-4">
+            <div className="flex-1 overflow-auto py-4 md:pt-20">
               <div className="px-3 pb-2">
                 <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                   Navegación
@@ -405,19 +399,21 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               </div>
             </div>
-            <div className="border-t p-4">
+            <div className="border-t p-4 bg-background/95 backdrop-blur-sm">
               <div className="rounded-lg bg-muted p-3">
-                <div className="flex items-center gap-3 flex-wrap">
-                  {session?.user?.image && (
-                    <Image
-                      alt="profil"
-                      src={session?.user?.image}
-                      className="mx-auto object-cover rounded-full w-11 h-11"
-                      width={20}
-                      height={20}
-                    />
-                  )}
-                  <div className="flex flex-col min-w-0 flex-1">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9 ring-2 ring-primary/20">
+                    {session && (
+                      <AvatarImage
+                        src={session?.user?.image ?? undefined}
+                        alt="Avatar"
+                      />
+                    )}
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10">
+                      AV
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col flex-1 min-w-0">
                     <span className="text-sm font-medium truncate">
                       {session?.user?.name}
                     </span>
@@ -425,20 +421,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       {session?.user?.email}
                     </span>
                   </div>
-                  <Button
-                    onClick={() => signOut()}
-                    size="icon"
-                    className="ml-2 shrink-0 bg-primary"
-                  >
-                    <LogOut className="h-5 w-5 text-white" />
-                    <span className="sr-only">Log out</span>
-                  </Button>
+                  <div className="flex-shrink-0">
+                    <Button
+                      onClick={() => signOut()}
+                      size="icon"
+                      className="bg-primary aspect-square h-9 w-9"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span className="sr-only">Log out</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </aside>
-        <main className="flex-1 overflow-auto max-h-[90vh]">{children}</main>
+        <main className="flex-1 overflow-auto md:ml-64">{children}</main>
       </div>
     </div>
   );

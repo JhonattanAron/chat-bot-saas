@@ -30,13 +30,16 @@
     "framer-motion": "^12.16.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.513.0",
+    "mui-color-input": "^7.0.0",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-intersection-observer": "^9.16.0",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
