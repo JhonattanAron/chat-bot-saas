@@ -56,16 +56,22 @@ import { FunctionModal } from "@/components/function-modal";
 import { MuiColorInput } from "mui-color-input";
 import { ChatWidgetCustomization } from "@/components/chat_cuztomization/chat-widget-customization";
 import SimpleAlert from "@/components/ui/simple-alert";
+import { useChatAssistantStore } from "@/store/chatAsistantStore";
+import { useSession } from "next-auth/react";
+import { APIResponse } from "@/interfaces/api-response-interface";
 
 export default function CreateBotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [botType, setBotType] = useState("web");
+  const [botName, setBotName] = useState("");
   const [useCase, setUseCase] = useState("restaurant");
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isGeneratingFaqs, setIsGeneratingFaqs] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [description, setDescription] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
+  const { createAssistant } = useChatAssistantStore();
+  const { data: session } = useSession();
   const [chatSettings, setChatSettings] = useState({
     title: "ChatBot Support",
     subtitle: "Virtual Assistant",
@@ -166,8 +172,28 @@ export default function CreateBotPage() {
   // Modificar el handleSubmit para incluir validación
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Verificar límite de bots
+    if (session?.binding_id === undefined) {
+      return <SimpleAlert message="Ocurrio un Error con la session" />;
+    }
+    const response = (await createAssistant({
+      user_id: session?.binding_id || "",
+      name: botName,
+      description: description,
+      funciones: "x",
+      type: botType,
+      status: "active",
+      use_case: useCase,
+      welcome_menssaje: welcomeMessage,
+    })) as APIResponse;
+    console.log({ Response: response });
+    if (response && (response as any).error) {
+      toast({
+        title: language === "en" ? "Error" : "Error",
+        description: (response as any).data?.error,
+        variant: "destructive",
+      });
+      return;
+    }
     if (activeBots >= planLimits[userPlan as keyof typeof planLimits]) {
       toast({
         title:
@@ -180,17 +206,7 @@ export default function CreateBotPage() {
       });
       return;
     }
-
     setIsLoading(true);
-
-    // Collect form data
-    const formData = new FormData(e.currentTarget);
-    const botName = formData.get("bot-name") as string;
-    const botDescription = formData.get("bot-description") as string;
-    const welcomeMessage = formData.get("welcome-message") as string;
-    const primaryColor = formData.get("primary-color-hex") as string;
-
-    // Simulate bot creation
     setTimeout(() => {
       setIsLoading(false);
       setActiveBots((prev) => prev + 1); // Incrementar contador
@@ -207,7 +223,7 @@ export default function CreateBotPage() {
       router.push("/dashboard/bots");
     }, 1500);
   };
-
+  //creacion del
   const handleAddFaq = () => {
     setFaqs([
       ...faqs,
@@ -815,6 +831,7 @@ export default function CreateBotPage() {
                       ? "e.g., Support Assistant"
                       : "ej., Asistente de Soporte"
                   }
+                  onChange={(e) => setBotName(e.target.value)}
                   required
                 />
               </div>

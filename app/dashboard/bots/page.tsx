@@ -71,13 +71,24 @@ export default function BotsPage() {
     <DashboardLayout>
       <div className="flex flex-col gap-4 p-2 sm:p-4 md:gap-8 md:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              My Bots
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              Manage and monitor your chatbots.
-            </p>
+          <div className="flex justify-between w-1/2">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                My Bots
+              </h1>
+              <p className="text-muted-foreground text-sm mb-3">
+                Manage and monitor your chatbots.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">Bots Activos</span>
+                  <Badge variant="default">2/3</Badge>
+                </div>
+                <Badge variant="outline" className="text-xs">
+                  Basic Plan
+                </Badge>
+              </div>
+            </div>
           </div>
           <Link href="/dashboard/bots/create">
             <Button className="gap-1 w-full sm:w-auto">

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -32,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Plus, Eye, EyeOff, Key } from "lucide-react";
 import { AlertTriangle, CheckCircle, Shield, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import SimpleAlert from "./ui/simple-alert";
 
 interface FunctionModalProps {
   open: boolean;
@@ -268,6 +271,30 @@ export function FunctionModal({
                 }
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="function-name">
+                {language === "en"
+                  ? "Write the function format: [FUNCTION:param1, param2, ...]"
+                  : "Escribe el formato de la función: [FUNCION:param1, param2, ...]"}
+              </Label>
+              <Input
+                id="function-name"
+                value={functionName}
+                onChange={(e) => setFunctionName(e.target.value)}
+                placeholder={
+                  language === "en"
+                    ? "e.g., [SEND_EMAIL:email, subject, message]"
+                    : "ej., [ENVIAR_CORREO:email, asunto, mensaje]"
+                }
+              />
+            </div>
+            <SimpleAlert
+              message={
+                language === "en"
+                  ? "The function must be written inside brackets like this: [FUNCTION:param1, param2, ...]. For example: [SEND_EMAIL:email, subject, message]"
+                  : "La función debe escribirse entre corchetes así: [FUNCION:param1, param2, ...]. Por ejemplo: [ENVIAR_CORREO:email, asunto, mensaje]"
+              }
+            />
 
             <div className="space-y-2">
               <Label htmlFor="function-description">
