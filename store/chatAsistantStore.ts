@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIResponse } from "@/interfaces/api-response-interface";
 import { create } from "zustand";
 

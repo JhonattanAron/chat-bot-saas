@@ -1,5 +1,5 @@
 import ROUTES from "@/constants/routes";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
