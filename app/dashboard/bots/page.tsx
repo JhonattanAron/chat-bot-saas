@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
@@ -26,46 +28,73 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { useChatAssistantStore } from "@/store/chatAsistantStore";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import SimpleAlert from "@/components/ui/simple-alert";
 
 export default function BotsPage() {
-  const bots = [
-    {
-      id: "1",
-      name: "Support Bot",
-      type: "web",
-      status: "online",
-      lastActive: "2 minutes ago",
-      messages: 1245,
-      description: "Customer support chatbot for the website",
-    },
-    {
-      id: "2",
-      name: "Sales Bot",
-      type: "web",
-      status: "online",
-      lastActive: "5 hours ago",
-      messages: 856,
-      description: "Sales assistant for product inquiries",
-    },
-    {
-      id: "3",
-      name: "WhatsApp Bot",
-      type: "whatsapp",
-      status: "maintenance",
-      lastActive: "1 day ago",
-      messages: 432,
-      description: "WhatsApp Business chatbot for customer support",
-    },
-    {
-      id: "4",
-      name: "Product Bot",
-      type: "web",
-      status: "offline",
-      lastActive: "3 days ago",
-      messages: 189,
-      description: "Product catalog and information assistant",
-    },
-  ];
+  const { getAssistants, assistants } = useChatAssistantStore();
+  const { data: session } = useSession();
+  const [errorBots, setErrorBots] = useState(false);
+  useEffect(() => {
+    if (session === undefined) return;
+    if (session) {
+      getAssistants(session.binding_id || "");
+    } else {
+      setErrorBots(true);
+    }
+  }, [session]);
+
+  if (assistants.length === 0 && !errorBots) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col gap-4 p-2 sm:p-4 md:gap-8 md:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex justify-between w-1/2">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  My Bots
+                </h1>
+                <p className="text-muted-foreground text-sm mb-3">
+                  Manage and monitor your chatbots.
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Bots Activos</span>
+                    <Badge variant="default">2/3</Badge>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    Basic Plan
+                  </Badge>
+                </div>
+              </div>
+            </div>
+            <Link href="/dashboard/bots/create">
+              <Button className="gap-1 w-full sm:w-auto">
+                <PlusCircle className="h-4 w-4" />
+                Create Bot
+              </Button>
+            </Link>
+          </div>
+          <div className="flex flex-col items-center justify-center h-full p-4">
+            <h2 className="text-xl font-semibold mb-2">
+              No tienes bots creados
+            </h2>
+            <p className="text-muted-foreground mb-4">
+              Crea tu primer bot para comenzar a gestionar tus conversaciones.
+            </p>
+            <Link href="/dashboard/bots/create">
+              <Button className="gap-1">
+                <PlusCircle className="h-4 w-4" />
+                Crear Bot
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -97,9 +126,12 @@ export default function BotsPage() {
             </Button>
           </Link>
         </div>
+        {errorBots && (
+          <SimpleAlert message="Se produjo un error con la sesión. Por favor, cierra sesión e intenta ingresar nuevamente." />
+        )}
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {bots.map((bot) => (
-            <Card key={bot.id} className="overflow-hidden">
+          {assistants.map((bot) => (
+            <Card key={bot._id} className="overflow-hidden">
               <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 pb-2">
                 <CardTitle className="text-lg sm:text-xl font-bold">
                   {bot.name}
@@ -166,21 +198,19 @@ export default function BotsPage() {
                     <span className="text-muted-foreground text-xs">
                       Messages
                     </span>
-                    <span className="font-medium">{bot.messages}</span>
+                    <span className="font-medium">1245</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs">
                       Last Active
                     </span>
-                    <span className="font-medium text-xs">
-                      {bot.lastActive}
-                    </span>
+                    <span className="font-medium text-xs">2 minutes ago</span>
                   </div>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col sm:flex-row sm:justify-between gap-2 border-t bg-muted/50 px-4 sm:px-6 py-3">
                 <Link
-                  href={`/dashboard/bots/${bot.id}`}
+                  href={`/dashboard/bots/${bot._id}`}
                   className="w-full sm:w-auto"
                 >
                   <Button
@@ -192,7 +222,7 @@ export default function BotsPage() {
                   </Button>
                 </Link>
                 <Link
-                  href={`/dashboard/bots/${bot.id}/edit`}
+                  href={`/dashboard/bots/${bot._id}/edit`}
                   className="w-full sm:w-auto"
                 >
                   <Button size="sm" className="w-full sm:w-auto">

@@ -332,11 +332,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Avatar className="ring-2 ring-primary/20">
-            <AvatarImage
-              src="/placeholder.svg?height=32&width=32"
-              alt="Avatar"
-            />
+          <Avatar className="h-9 w-9 ring-2 ring-primary/20">
+            {session && (
+              <AvatarImage
+                src={session?.user?.image ?? undefined}
+                alt="Avatar"
+              />
+            )}
             <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10">
               JD
             </AvatarFallback>

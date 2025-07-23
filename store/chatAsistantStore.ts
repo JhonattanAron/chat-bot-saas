@@ -1,24 +1,54 @@
 import { APIResponse } from "@/interfaces/api-response-interface";
 import { create } from "zustand";
 
-interface ChatAssistant {
-  id?: string;
+interface FAQ {
+  _id?: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
+export interface ChatAssistant {
+  _id?: string;
   user_id: string;
   name: string;
   description: string;
-  funciones: string;
+  funciones?: [];
   type: string;
   status: string;
   use_case: string;
-  welcome_menssaje: string;
+  welcome_message: string;
+  faqs: FAQ[];
 }
 
 interface ChatAssistantStore {
   assistants: ChatAssistant[];
+  assistant?: ChatAssistant;
   loading: boolean;
   error: string | null;
   createAssistant: (assistant: ChatAssistant) => Promise<APIResponse>;
   updateAssistant: (assistant: ChatAssistant) => Promise<void>;
+  createFaq: (faqData: {
+    user_id: string;
+    assistant_id: string;
+    faqs: FAQ[];
+  }) => Promise<void>;
+  updateFaq: (faqUpdate: {
+    user_id: string;
+    assistant_id: string;
+    faqId: string;
+    update: Partial<FAQ>;
+  }) => Promise<void>;
+  deleteFaq: (params: {
+    user_id: string;
+    assistant_id: string;
+    faqId: string;
+  }) => Promise<void>;
+  getAssistants: (user_id: string) => Promise<ChatAssistant[]>;
+  getAssistantById: (
+    chat_id: string,
+    user_id: string
+  ) => Promise<ChatAssistant | undefined>;
   deleteAssistant: (id: string) => Promise<void>;
   setAssistants: (assistants: ChatAssistant[]) => void;
   setError: (error: string | null) => void;
@@ -31,6 +61,103 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
 
   setAssistants: (assistants) => set({ assistants }),
   setError: (error) => set({ error }),
+  createFaq: async (faqData: {
+    user_id: string;
+    assistant_id: string;
+    faqs: FAQ[];
+  }) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch("/api/faq-tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(faqData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error creating FAQ");
+      // Opcional: actualizar el estado local si lo necesitas
+      set({ loading: false });
+      return data;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+  updateFaq: async (faqUpdate: {
+    user_id: string;
+    assistant_id: string;
+    faqId: string;
+    update: Partial<FAQ>;
+  }) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch("/api/faq-tasks", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(faqUpdate),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error updating FAQ");
+      set({ loading: false });
+      return data;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+  deleteFaq: async (params: {
+    user_id: string;
+    assistant_id: string;
+    faqId: string;
+  }) => {
+    set({ loading: true, error: null });
+    try {
+      const query = new URLSearchParams(
+        params as Record<string, string>
+      ).toString();
+      const res = await fetch(`/api/faq-tasks?${query}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error deleting FAQ");
+      set({ loading: false });
+      return data;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+  getAssistants: async (user_id) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(`/api/asistant-tasks?user_id=${user_id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error fetching assistants");
+      set({ assistants: data, loading: false });
+      return data;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      return [];
+    }
+  },
+  getAssistantById: async (chat_id, user_id) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(
+        `/api/asistant-get?chat_id=${chat_id}&user_id=${user_id}`
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error fetching assistants");
+      set({ assistant: data, loading: false });
+      return data;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      return [];
+    }
+  },
 
   createAssistant: async (assistant) => {
     set({ loading: true, error: null });
@@ -46,7 +173,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
           type: assistant.type,
           status: assistant.status,
           use_case: assistant.use_case,
-          welcome_menssaje: assistant.welcome_menssaje,
+          welcome_message: assistant.welcome_message,
         }),
       });
       const data = await res.json();
@@ -57,11 +184,11 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
           assistants: [...state.assistants, data],
           loading: false,
         }));
-        return { data, error: false }; // <-- retorna la respuesta del servidor
+        return { data, error: false };
       }
     } catch (err: any) {
       set({ error: err.message, loading: false });
-      throw err; // <-- lanza el error para manejarlo donde se llame
+      throw err;
     }
   },
 
@@ -77,7 +204,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
       if (!res.ok) throw new Error(data.error || "Error updating assistant");
       set((state) => ({
         assistants: state.assistants.map((a) =>
-          a.id === assistant.id ? { ...a, ...assistant } : a
+          a._id === assistant._id ? { ...a, ...assistant } : a
         ),
         loading: false,
       }));
@@ -97,7 +224,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error deleting assistant");
       set((state) => ({
-        assistants: state.assistants.filter((a) => a.id !== id),
+        assistants: state.assistants.filter((a) => a._id !== id),
         loading: false,
       }));
     } catch (err: any) {

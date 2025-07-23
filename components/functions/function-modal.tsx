@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -32,12 +32,35 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Plus, Eye, EyeOff, Key } from "lucide-react";
 import { AlertTriangle, CheckCircle, Shield, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import SimpleAlert from "./ui/simple-alert";
+import SimpleAlert from "../ui/simple-alert"; // Assuming this path is correct
+
+interface FunctionData {
+  id?: string; // Optional ID for editing existing functions
+  name: string;
+  description: string;
+  type: "api" | "custom";
+  api?: {
+    url: string;
+    method: string;
+    headers: { key: string; value: string }[];
+    parameters: {
+      name: string;
+      type: string;
+      required: boolean;
+      description: string;
+    }[];
+    auth: { type: string; value: string } | null;
+  };
+  code?: string;
+  credentials?: { name: string; value: string; description: string }[];
+}
 
 interface FunctionModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAddFunction: (functionData: any) => void;
+  onAddFunction: (functionData: FunctionData) => void;
+  editFunction?: FunctionData; // New prop for editing
+  onEditFunction?: (functionData: FunctionData) => void; // New callback for editing
   language?: "en" | "es";
 }
 
@@ -45,9 +68,11 @@ export function FunctionModal({
   open,
   onOpenChange,
   onAddFunction,
+  editFunction, // Destructure new prop
+  onEditFunction, // Destructure new callback
   language = "en",
 }: FunctionModalProps) {
-  const [functionType, setFunctionType] = useState("api");
+  const [functionType, setFunctionType] = useState<"api" | "custom">("api");
   const [functionName, setFunctionName] = useState("");
   const [description, setDescription] = useState("");
   const [apiUrl, setApiUrl] = useState("");
@@ -73,6 +98,73 @@ export function FunctionModal({
   } | null>(null);
   const [showVerificationAlert, setShowVerificationAlert] = useState(false);
 
+  // Function to reset all form fields to their initial state
+  const resetForm = () => {
+    setFunctionType("api");
+    setFunctionName("");
+    setDescription("");
+    setApiUrl("");
+    setMethod("POST");
+    setHeaders([{ key: "", value: "" }]);
+    setParameters([
+      { name: "", type: "string", required: true, description: "" },
+    ]);
+    setCustomCode("");
+    setCustomCredentials([{ name: "", value: "", description: "" }]);
+    setShowCredentials({});
+    setRequiresAuth(false);
+    setAuthType("bearer");
+    setAuthValue("");
+    setIsVerifying(false);
+    setVerificationResult(null);
+    setShowVerificationAlert(false);
+  };
+
+  // Effect to populate form when editFunction is provided or reset when modal opens/closes
+  useEffect(() => {
+    if (open) {
+      if (editFunction) {
+        // Populate form with editFunction data
+        setFunctionName(editFunction.name || "");
+        setDescription(editFunction.description || "");
+        setFunctionType(editFunction.type || "api");
+
+        if (editFunction.type === "api" && editFunction.api) {
+          setApiUrl(editFunction.api.url || "");
+          setMethod(editFunction.api.method || "POST");
+          setHeaders(editFunction.api.headers || [{ key: "", value: "" }]);
+          setParameters(
+            editFunction.api.parameters || [
+              { name: "", type: "string", required: true, description: "" },
+            ]
+          );
+          setRequiresAuth(!!editFunction.api.auth);
+          setAuthType(editFunction.api.auth?.type || "bearer");
+          // Note: For security, you might not want to pre-fill sensitive auth values.
+          // For this example, we'll pre-fill it as per the original component's pattern.
+          setAuthValue(editFunction.api.auth?.value || "");
+        } else if (editFunction.type === "custom") {
+          setCustomCode(editFunction.code || "");
+          setCustomCredentials(
+            editFunction.credentials || [
+              { name: "", value: "", description: "" },
+            ]
+          );
+          // Reset verification state when loading an existing function for editing
+          setVerificationResult(null);
+          setIsVerifying(false);
+          setShowVerificationAlert(false);
+        }
+      } else {
+        // If no editFunction, reset to default for adding a new function
+        resetForm();
+      }
+    } else {
+      // When modal closes, reset form
+      resetForm();
+    }
+  }, [open, editFunction]); // Depend on open and editFunction
+
   const handleVerifyFunction = async () => {
     if (!customCode.trim()) {
       setVerificationResult({
@@ -84,7 +176,6 @@ export function FunctionModal({
       });
       return;
     }
-
     setShowVerificationAlert(true);
   };
 
@@ -92,14 +183,11 @@ export function FunctionModal({
     setShowVerificationAlert(false);
     setIsVerifying(true);
     setVerificationResult(null);
-
     try {
       // Simulate AI verification API call
       await new Promise((resolve) => setTimeout(resolve, 3000));
-
       // Simulate verification result
       const hasIssues = Math.random() < 0.2; // 20% chance of issues for demo
-
       if (hasIssues) {
         setVerificationResult({
           status: "warning",
@@ -131,7 +219,9 @@ export function FunctionModal({
   };
 
   const handleSubmit = () => {
-    const functionData = {
+    const functionData: FunctionData = {
+      // If editing, include the original ID
+      ...(editFunction && editFunction.id && { id: editFunction.id }),
       name: functionName,
       description,
       type: functionType,
@@ -150,36 +240,21 @@ export function FunctionModal({
       }),
     };
 
-    onAddFunction(functionData);
+    if (editFunction && onEditFunction) {
+      onEditFunction(functionData);
+    } else {
+      onAddFunction(functionData);
+    }
     onOpenChange(false);
-
-    // Reset form
-    setFunctionName("");
-    setDescription("");
-    setApiUrl("");
-    setMethod("POST");
-    setHeaders([{ key: "", value: "" }]);
-    setParameters([
-      { name: "", type: "string", required: true, description: "" },
-    ]);
-    setCustomCode("");
-    setCustomCredentials([{ name: "", value: "", description: "" }]);
-    setShowCredentials({});
-    setRequiresAuth(false);
-    setAuthValue("");
-    setVerificationResult(null);
-    setIsVerifying(false);
-    setShowVerificationAlert(false);
+    // Form reset is now handled by the useEffect when onOpenChange(false) is called
   };
 
   const addHeader = () => {
     setHeaders([...headers, { key: "", value: "" }]);
   };
-
   const removeHeader = (index: number) => {
     setHeaders(headers.filter((_, i) => i !== index));
   };
-
   const updateHeader = (
     index: number,
     field: "key" | "value",
@@ -196,11 +271,9 @@ export function FunctionModal({
       { name: "", type: "string", required: true, description: "" },
     ]);
   };
-
   const removeParameter = (index: number) => {
     setParameters(parameters.filter((_, i) => i !== index));
   };
-
   const updateParameter = (index: number, field: string, value: any) => {
     const updatedParameters = [...parameters];
     updatedParameters[index] = { ...updatedParameters[index], [field]: value };
@@ -213,14 +286,12 @@ export function FunctionModal({
       { name: "", value: "", description: "" },
     ]);
   };
-
   const removeCustomCredential = (index: number) => {
     setCustomCredentials(customCredentials.filter((_, i) => i !== index));
     const newShowCredentials = { ...showCredentials };
     delete newShowCredentials[index];
     setShowCredentials(newShowCredentials);
   };
-
   const updateCustomCredential = (
     index: number,
     field: "name" | "value" | "description",
@@ -230,7 +301,6 @@ export function FunctionModal({
     updatedCredentials[index][field] = value;
     setCustomCredentials(updatedCredentials);
   };
-
   const toggleCredentialVisibility = (index: number) => {
     setShowCredentials((prev) => ({
       ...prev,
@@ -243,17 +313,24 @@ export function FunctionModal({
       <DialogContent className="sm:max-w-[700px] h-[80vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle>
-            {language === "en"
+            {editFunction
+              ? language === "en"
+                ? "Edit Custom Function"
+                : "Editar Función Personalizada"
+              : language === "en"
               ? "Add Custom Function"
               : "Agregar Función Personalizada"}
           </DialogTitle>
           <DialogDescription>
-            {language === "en"
+            {editFunction
+              ? language === "en"
+                ? "Modify the details of your custom function"
+                : "Modifica los detalles de tu función personalizada"
+              : language === "en"
               ? "Create a custom function that your bot can execute"
               : "Crea una función personalizada que tu bot puede ejecutar"}
           </DialogDescription>
         </DialogHeader>
-
         <div className="flex-1 overflow-y-auto p-3">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -270,14 +347,19 @@ export function FunctionModal({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="function-name">
+              {/*
+                NOTE: The original component uses the same `functionName` state and `id="function-name"`
+                for both "Function Name" and "Function Format". This means only one value can be stored.
+                For a more robust solution, consider using a separate state variable and ID for "Function Format".
+              */}
+              <Label htmlFor="function-format">
                 {language === "en"
                   ? "Write the function format: [FUNCTION:param1, param2, ...]"
                   : "Escribe el formato de la función: [FUNCION:param1, param2, ...]"}
               </Label>
               <Input
-                id="function-name"
-                value={functionName}
+                id="function-format" // Changed ID to avoid conflict, though state is still shared
+                value={functionName} // Still using functionName as per original component
                 onChange={(e) => setFunctionName(e.target.value)}
                 placeholder={
                   language === "en"
@@ -293,7 +375,6 @@ export function FunctionModal({
                   : "La función debe escribirse entre corchetes así: [FUNCION:param1, param2, ...]. Por ejemplo: [ENVIAR_CORREO:email, asunto, mensaje]"
               }
             />
-
             <div className="space-y-2">
               <Label htmlFor="function-description">
                 {language === "en" ? "Description" : "Descripción"}
@@ -310,7 +391,6 @@ export function FunctionModal({
                 className="min-h-[80px]"
               />
             </div>
-
             <Tabs value={functionType} onValueChange={setFunctionType}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="api">API Call</TabsTrigger>
@@ -318,7 +398,6 @@ export function FunctionModal({
                   {language === "en" ? "Custom Code" : "Código Personalizado"}
                 </TabsTrigger>
               </TabsList>
-
               <TabsContent value="api" className="space-y-4">
                 <Card>
                   <CardHeader>
@@ -360,7 +439,6 @@ export function FunctionModal({
                         />
                       </div>
                     </div>
-
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="requires-auth"
@@ -373,7 +451,6 @@ export function FunctionModal({
                           : "Requiere Autenticación"}
                       </Label>
                     </div>
-
                     {requiresAuth && (
                       <div className="grid grid-cols-3 gap-2">
                         <div className="space-y-2">
@@ -411,7 +488,6 @@ export function FunctionModal({
                         </div>
                       </div>
                     )}
-
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label>
@@ -452,7 +528,7 @@ export function FunctionModal({
                             }
                           />
                           <Button
-                            className="px-3"
+                            className="px-3 bg-transparent"
                             type="button"
                             variant="outline"
                             size="icon"
@@ -463,7 +539,6 @@ export function FunctionModal({
                         </div>
                       ))}
                     </div>
-
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label>
@@ -517,7 +592,6 @@ export function FunctionModal({
                               </Select>
                             </div>
                           </div>
-
                           <div className="col-span-2 flex items-center gap-2">
                             <Switch
                               checked={param.required}
@@ -545,7 +619,6 @@ export function FunctionModal({
                   </CardContent>
                 </Card>
               </TabsContent>
-
               <TabsContent value="custom" className="space-y-4">
                 {/* Security Credentials Section */}
                 <Card>
@@ -662,7 +735,6 @@ export function FunctionModal({
                         </div>
                       ))}
                     </div>
-
                     {customCredentials.some((c) => c.name) && (
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                         <div className="flex items-center gap-2 text-blue-800 mb-2">
@@ -688,7 +760,6 @@ export function FunctionModal({
                     )}
                   </CardContent>
                 </Card>
-
                 {/* Custom Code Section */}
                 <Card>
                   <CardHeader>
@@ -718,7 +789,7 @@ export function FunctionModal({
                             size="sm"
                             onClick={handleVerifyFunction}
                             disabled={isVerifying || !customCode.trim()}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 bg-transparent"
                           >
                             {isVerifying ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -774,7 +845,6 @@ function executeFunction(params, credentials) {
                           className="min-h-[250px] font-mono text-sm"
                         />
                       </div>
-
                       {verificationResult && (
                         <Alert
                           className={`${
@@ -809,7 +879,6 @@ function executeFunction(params, credentials) {
                           </div>
                         </Alert>
                       )}
-
                       <div className="mt-2 space-y-2">
                         <Badge variant="outline" className="text-xs">
                           {language === "en"
@@ -829,7 +898,6 @@ function executeFunction(params, credentials) {
             </Tabs>
           </div>
         </div>
-
         <div className="flex justify-end gap-2 pt-4 border-t flex-shrink-0">
           {functionType === "custom" && !verificationResult?.status && (
             <div className="flex items-center text-xs text-amber-600 mr-auto">
@@ -861,7 +929,13 @@ function executeFunction(params, credentials) {
                   verificationResult.status !== "success"))
             }
           >
-            {language === "en" ? "Add Function" : "Agregar Función"}
+            {editFunction
+              ? language === "en"
+                ? "Save Changes"
+                : "Guardar Cambios"
+              : language === "en"
+              ? "Add Function"
+              : "Agregar Función"}
           </Button>
         </div>
         {/* Verification Alert Dialog */}
@@ -880,14 +954,12 @@ function executeFunction(params, credentials) {
                   </h3>
                 </div>
               </div>
-
               <div className="space-y-3 text-sm text-gray-600">
                 <p>
                   {language === "en"
                     ? "Your code will be analyzed by our AI security model to detect potential malicious code or security vulnerabilities."
                     : "Tu código será analizado por nuestro modelo de IA de seguridad para detectar posible código malicioso o vulnerabilidades de seguridad."}
                 </p>
-
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                   <div className="flex items-center gap-2 text-yellow-800">
                     <AlertTriangle className="h-4 w-4" />
@@ -903,14 +975,12 @@ function executeFunction(params, credentials) {
                       : "Esta verificación consumirá aproximadamente 50-100 tokens de tu saldo de cuenta."}
                   </p>
                 </div>
-
                 <p className="text-xs">
                   {language === "en"
                     ? "The verification helps ensure your bot functions safely and securely."
                     : "La verificación ayuda a asegurar que tu bot funcione de manera segura."}
                 </p>
               </div>
-
               <div className="flex gap-2 pt-2">
                 <Button
                   variant="outline"
