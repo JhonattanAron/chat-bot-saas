@@ -14,7 +14,12 @@ interface ProductStore {
   products: Product[];
   loading: boolean;
   error: string | null;
-  fetchProducts: (user_id: string) => Promise<void>;
+  AddProduct: (
+    product: Product,
+    user_id: string,
+    assistant_id: string
+  ) => Promise<void>;
+  fetchProducts: (user_id: string, assistant_id: string) => Promise<void>;
   fetchProductById: (id: string) => Promise<Product | null>;
   updateProduct: (
     id: string,
@@ -34,11 +39,29 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   setProducts: (products) => set({ products }),
   setError: (error) => set({ error }),
 
-  fetchProducts: async (user_id) => {
+  AddProduct: async (product, user_id, assistant_id) => {
     set({ loading: true, error: null });
     try {
       const res = await fetch(
-        `/api/products-tasks?user_id=${encodeURIComponent(user_id)}`
+        `/api/products-tasks?user_id=${encodeURIComponent(
+          user_id
+        )}&assistant_id=${encodeURIComponent(assistant_id)}`
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error fetching products");
+      set({ products: data, loading: false });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  fetchProducts: async (user_id, assistant_id) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(
+        `/api/products-tasks?user_id=${encodeURIComponent(
+          user_id
+        )}&assistant_id=${encodeURIComponent(assistant_id)}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error fetching products");

@@ -6,6 +6,7 @@ const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8080";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get("user_id");
+  const assistant_id = searchParams.get("assistant_id");
   const id = searchParams.get("id");
 
   try {
@@ -17,14 +18,16 @@ export async function GET(req: NextRequest) {
     }
 
     // Si no hay id, busca todos (findAll)
-    if (!user_id) {
+    if (!user_id || !assistant_id) {
       return NextResponse.json(
         { error: "Missing user_id query parameter" },
         { status: 400 }
       );
     }
     const response = await fetch(
-      `${NEST_API_URL}/products?user_id=${encodeURIComponent(user_id)}`
+      `${NEST_API_URL}/products?user_id=${encodeURIComponent(
+        user_id
+      )}&assistant_id=${encodeURIComponent(assistant_id)}`
     );
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });

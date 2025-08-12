@@ -9,17 +9,22 @@ export function parseProductString(input: string) {
   const regex = /\{(.+?)\}/g;
   const matches = [...input.matchAll(regex)];
 
-  if (matches.length !== 3) {
+  if (matches.length < 3 || matches.length > 4) {
     throw new Error(
-      "Formato inválido. Se esperaban tres valores entre llaves."
+      "Formato inválido. Se esperaban 3 o 4 valores entre llaves."
     );
   }
 
-  const [name, price, description] = matches.map((match) => match[1]);
+  const [name, price, description] = matches.map((m) => m[1]);
 
-  // Extraer número al final (ignora espacios)
-  const stockMatch = input.match(/\}[^}]*?(\d+)\s*$/);
-  const stock = stockMatch ? parseInt(stockMatch[1], 10) : 0;
+  // Si hay una cuarta llave, extraer stock desde ella
+  let stock = 0;
+  if (matches[3]) {
+    const stockMatch = matches[3][1].match(/(\d+)/);
+    if (stockMatch) {
+      stock = parseInt(stockMatch[1], 10);
+    }
+  }
 
   return {
     name,

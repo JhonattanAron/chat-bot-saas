@@ -57,6 +57,7 @@ import {
   useFunctionsStore,
 } from "@/store/functionsStore";
 import { useChatStore } from "@/store/chatControlStore";
+import AdvancedBotTasks from "@/components/functions/automatizaciones-admin";
 
 interface BotData {
   id: string;
@@ -209,7 +210,7 @@ export default function EditBotPage({
         });
       } else {
         await getAssistantById(id, session.binding_id);
-        await fetchProducts(session.binding_id);
+        await fetchProducts(session.binding_id, id);
         await fetchFunctions(session.binding_id, id);
         await fetchUserChats(session.binding_id);
         console.log(assistant);
@@ -744,8 +745,9 @@ export default function EditBotPage({
                 value="functions"
                 className="text-xs sm:text-sm px-1 sm:px-3 py-2 rounded-md data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm transition-all"
               >
-                Functions
+                Servicios Tecnicos
               </TabsTrigger>
+
               <TabsTrigger
                 value="chat-customization"
                 className="text-xs sm:text-sm px-1 sm:px-3 py-2 rounded-md data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm transition-all"
@@ -1193,165 +1195,192 @@ export default function EditBotPage({
           </TabsContent>
           <TabsContent value="functions" className="space-y-4">
             <Card>
-              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                <div>
-                  <CardTitle>Bot Functions & Services</CardTitle>
-                  <CardDescription>
-                    Add custom functions and services that your bot can execute.
-                  </CardDescription>
-                </div>
-                <Button
-                  onClick={() => {
-                    setEditingFunction(undefined); // Asegurarse de que es para añadir
-                    setIsFunctionModalOpen(true);
-                  }}
-                  className="gap-1 w-full sm:w-auto"
-                  type="button"
-                >
-                  <Plus className="h-4 w-4" />
-                  Add Function
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {functions.length > 0 ? (
-                    <Accordion type="multiple" className="space-y-4">
-                      {functions.map((func, index) => (
-                        <AccordionItem
-                          key={func._id || index} // Usar _id si está disponible, sino index
-                          value={`function-${index}`}
-                          className="border rounded-md p-2"
+              <Tabs defaultValue="functions-list">
+                <TabsList className="w-full h-auto p-1 grid grid-cols-2 md:grid-cols-2 gap-0.5 bg-muted rounded-lg">
+                  <TabsTrigger value="functions-list">Funciones</TabsTrigger>
+                  <TabsTrigger value="autimatizaciones">
+                    Automtizaciones
+                  </TabsTrigger>
+                </TabsList>
+                <CardContent>
+                  <TabsContent value="functions-list">
+                    <Card>
+                      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="my-5">
+                          <CardTitle>Bot Functions & Services</CardTitle>
+                          <CardDescription>
+                            Add custom functions and services that your bot can
+                            execute.
+                          </CardDescription>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setEditingFunction(undefined); // Asegurarse de que es para añadir
+                            setIsFunctionModalOpen(true);
+                          }}
+                          className="gap-1 w-full sm:w-auto"
+                          type="button"
                         >
-                          <div className="flex items-center justify-between">
-                            <AccordionTrigger className="hover:no-underline flex-1 text-left">
-                              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                <Badge
-                                  variant={
-                                    func.type === "api"
-                                      ? "default"
-                                      : "secondary"
-                                  }
+                          <Plus className="h-4 w-4" />
+                          Add Function
+                        </Button>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {functions.length > 0 ? (
+                            <Accordion type="multiple" className="space-y-4">
+                              {functions.map((func, index) => (
+                                <AccordionItem
+                                  key={func._id || index} // Usar _id si está disponible, sino index
+                                  value={`function-${index}`}
+                                  className="border rounded-md p-2"
                                 >
-                                  {func.type === "api" ? "API" : "Custom"}
-                                </Badge>
-                                <span className="truncate">{func.name}</span>
-                              </div>
-                            </AccordionTrigger>
-                            <div>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingFunction(func); // Establecer la función a editar
-                                  setIsFunctionModalOpen(true); // Abrir el modal
-                                }}
-                                className="h-8 w-8 text-muted-foreground hover:text-green-700 flex-shrink-0"
-                                type="button"
-                              >
-                                <FilePen className="h-4 w-4" />
-                                <span className="sr-only">Edit Function</span>
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleRemoveFunction(func._id); // Usar _id para eliminar
-                                }}
-                                className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
-                                type="button"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                <span className="sr-only">Remove Function</span>
-                              </Button>
-                            </div>
-                          </div>
-                          <AccordionContent className="space-y-4 pt-2">
-                            <div className="space-y-2">
-                              <p className="text-sm text-muted-foreground">
-                                {func.description}
-                              </p>
-                              {func.hasApi && func.api && (
-                                <div className="space-y-2">
-                                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                    <Badge variant="outline">
-                                      {func.api.method}
-                                    </Badge>
-                                    <code className="text-xs bg-muted px-2 py-1 rounded break-all">
-                                      {func.api.url}
-                                    </code>
-                                  </div>
-                                  {func.api.parameters &&
-                                    func.api.parameters.length > 0 && (
-                                      <div>
-                                        <p className="text-sm font-medium mb-1">
-                                          Parameters:
-                                        </p>
-                                        <div className="flex flex-wrap gap-1">
-                                          {func.api.parameters.map(
-                                            (
-                                              param: {
-                                                name: string;
-                                                type: string;
-                                                required?: boolean;
-                                              },
-                                              paramIndex: number
-                                            ) => (
-                                              <Badge
-                                                key={paramIndex}
-                                                variant="outline"
-                                                className="text-xs"
-                                              >
-                                                {param.name} ({param.type})
-                                                {param.required && "*"}
-                                              </Badge>
-                                            )
-                                          )}
-                                        </div>
+                                  <div className="flex items-center justify-between">
+                                    <AccordionTrigger className="hover:no-underline flex-1 text-left">
+                                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                        <Badge
+                                          variant={
+                                            func.type === "api"
+                                              ? "default"
+                                              : "secondary"
+                                          }
+                                        >
+                                          {func.type === "api"
+                                            ? "API"
+                                            : "Custom"}
+                                        </Badge>
+                                        <span className="truncate">
+                                          {func.name}
+                                        </span>
                                       </div>
-                                    )}
-                                </div>
-                              )}
-                              {func.type === "custom" && (
-                                <div className="bg-muted p-3 rounded-md">
-                                  <p className="text-xs font-medium mb-1">
-                                    Custom Code:
-                                  </p>
-                                  <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
-                                    {func.code?.substring(0, 200)}
-                                    {func.code &&
-                                      func.code.length > 200 &&
-                                      "..."}
-                                  </pre>
-                                </div>
-                              )}
+                                    </AccordionTrigger>
+                                    <div>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setEditingFunction(func); // Establecer la función a editar
+                                          setIsFunctionModalOpen(true); // Abrir el modal
+                                        }}
+                                        className="h-8 w-8 text-muted-foreground hover:text-green-700 flex-shrink-0"
+                                        type="button"
+                                      >
+                                        <FilePen className="h-4 w-4" />
+                                        <span className="sr-only">
+                                          Edit Function
+                                        </span>
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleRemoveFunction(func._id); // Usar _id para eliminar
+                                        }}
+                                        className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
+                                        type="button"
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                        <span className="sr-only">
+                                          Remove Function
+                                        </span>
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <AccordionContent className="space-y-4 pt-2">
+                                    <div className="space-y-2">
+                                      <p className="text-sm text-muted-foreground">
+                                        {func.description}
+                                      </p>
+                                      {func.hasApi && func.api && (
+                                        <div className="space-y-2">
+                                          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                            <Badge variant="outline">
+                                              {func.api.method}
+                                            </Badge>
+                                            <code className="text-xs bg-muted px-2 py-1 rounded break-all">
+                                              {func.api.url}
+                                            </code>
+                                          </div>
+                                          {func.api.parameters &&
+                                            func.api.parameters.length > 0 && (
+                                              <div>
+                                                <p className="text-sm font-medium mb-1">
+                                                  Parameters:
+                                                </p>
+                                                <div className="flex flex-wrap gap-1">
+                                                  {func.api.parameters.map(
+                                                    (
+                                                      param: {
+                                                        name: string;
+                                                        type: string;
+                                                        required?: boolean;
+                                                      },
+                                                      paramIndex: number
+                                                    ) => (
+                                                      <Badge
+                                                        key={paramIndex}
+                                                        variant="outline"
+                                                        className="text-xs"
+                                                      >
+                                                        {param.name} (
+                                                        {param.type})
+                                                        {param.required && "*"}
+                                                      </Badge>
+                                                    )
+                                                  )}
+                                                </div>
+                                              </div>
+                                            )}
+                                        </div>
+                                      )}
+                                      {func.type === "custom" && (
+                                        <div className="bg-muted p-3 rounded-md">
+                                          <p className="text-xs font-medium mb-1">
+                                            Custom Code:
+                                          </p>
+                                          <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
+                                            {func.code?.substring(0, 200)}
+                                            {func.code &&
+                                              func.code.length > 200 &&
+                                              "..."}
+                                          </pre>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              ))}
+                            </Accordion>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center py-8 text-center">
+                              <p className="text-muted-foreground">
+                                No functions added yet.
+                              </p>
+                              <Button
+                                onClick={() => {
+                                  setEditingFunction(undefined); // Asegurarse de que es para añadir
+                                  setIsFunctionModalOpen(true);
+                                }}
+                                variant="outline"
+                                className="mt-4 gap-1"
+                                type="button"
+                              >
+                                <Plus className="h-4 w-4" />
+                                Add Your First Function
+                              </Button>
                             </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <p className="text-muted-foreground">
-                        No functions added yet.
-                      </p>
-                      <Button
-                        onClick={() => {
-                          setEditingFunction(undefined); // Asegurarse de que es para añadir
-                          setIsFunctionModalOpen(true);
-                        }}
-                        variant="outline"
-                        className="mt-4 gap-1"
-                        type="button"
-                      >
-                        <Plus className="h-4 w-4" />
-                        Add Your First Function
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  <TabsContent value="autimatizaciones">
+                    <AdvancedBotTasks />
+                  </TabsContent>
+                </CardContent>
+              </Tabs>
             </Card>
           </TabsContent>
           <TabsContent value="chat-customization" className="space-y-4">

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export interface AssistantFunction {
+  [x: string]: string | undefined;
   id?: string;
   name: string;
   description?: string;

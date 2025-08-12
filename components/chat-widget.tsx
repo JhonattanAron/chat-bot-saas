@@ -140,13 +140,11 @@ export function ChatWidget({
 
   // Validation and Chat Start Logic
   const validateAndStartChat = useCallback(async () => {
-    if (isValidated && currentChatId) return; // Already validated and chat started
-
+    if (isValidated) return; // Solo valida, no crea chat
     setValidationAttempted(true);
-    setValidationError(null); // Clear previous errors
+    setValidationError(null);
 
     try {
-      // Step 1: Validate SDK
       const validationResponse = await fetch(validationApiUrl, {
         method: "POST",
         headers: {
@@ -154,9 +152,10 @@ export function ChatWidget({
         },
         body: JSON.stringify({ clientKey }),
       });
+
       const validationData = await validationResponse.json();
 
-      if (!validationResponse.ok) {
+      if (!validationResponse.ok || !validationData.success) {
         setIsValidated(false);
         setValidationError(
           validationData.message || "Error de validación desconocido."
@@ -168,61 +167,20 @@ export function ChatWidget({
       setIsValidated(true);
       setValidationError(null);
       console.log("SDK Validado correctamente.");
-
-      // Step 2: Start Chat Session
-      const chatStartResponse = await fetch(chatStartApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          assistant_id: assistantId,
-          promt: initialBotMessage, // Use initialBotMessage as the first prompt
-        }),
-      });
-      const chatStartData = await chatStartResponse.json();
-
-      if (!chatStartResponse.ok) {
-        console.error("Error al iniciar el chat:", chatStartData.error);
-        setMessages([
-          {
-            id: "error-start",
-            content: `No se pudo iniciar el chat: ${
-              chatStartData.error || "Error desconocido."
-            }`,
-            sender: "bot",
-            timestamp: new Date(),
-          },
-        ]);
-        return;
-      }
-
-      setCurrentChatId(chatStartData.chatId); // Assuming your API returns a chatId
       setMessages([
         {
-          id: "initial",
+          id: Date.now().toString(),
           content: initialBotMessage,
           sender: "bot",
           timestamp: new Date(),
         },
       ]);
-      console.log("Chat iniciado con ID:", chatStartData.chatId);
     } catch (error) {
       setIsValidated(false);
       setValidationError("No se pudo conectar con el servidor.");
-      console.error("Error al conectar con el servidor:", error);
+      console.error("Error al validar el SDK:", error);
     }
-  }, [
-    clientKey,
-    validationApiUrl,
-    chatStartApiUrl,
-    assistantId,
-    userId,
-    initialBotMessage,
-    isValidated,
-    currentChatId,
-  ]);
+  }, [clientKey, validationApiUrl, isValidated]);
 
   // Trigger validation and chat start when the chat opens
   useEffect(() => {
@@ -240,70 +198,125 @@ export function ChatWidget({
 
   const handleSendMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!input.trim() || !isValidated || !currentChatId) return;
+    if (!input.trim() || !isValidated) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: input,
-      sender: "user",
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
     setIsTyping(true);
 
-    try {
-      const response = await fetch(chatApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chatId: currentChatId, // Use the obtained chatId
-          assistant_id: assistantId,
-          role: "user", // Assuming your API expects 'user' role for user messages
-          content: userMessage.content,
-        }),
-      });
+    // Si no hay chat aún, lo crea aquí
+    if (!currentChatId) {
+      try {
+        const chatStartResponse = await fetch(chatStartApiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            assistant_id: assistantId,
+            promt: input.trim(), // usar primer mensaje como prompt
+          }),
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        const botMessage: Message = {
-          id: Date.now().toString() + "-bot",
-          content: data.response, // Assuming your API returns the bot's response in a 'response' field
-          sender: "bot",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, botMessage]);
-      } else {
-        const errorData = await response.json();
-        console.error(
-          "Error al enviar mensaje al chat API:",
-          errorData.message
-        );
-        const errorMessage: Message = {
-          id: Date.now().toString() + "-error",
-          content: `Lo siento, no pude obtener una respuesta en este momento: ${
-            errorData.message || "Error desconocido."
-          }`,
-          sender: "bot",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, errorMessage]);
+        const chatStartData = await chatStartResponse.json();
+        console.log(chatStartData);
+
+        if (!chatStartResponse.ok || !chatStartData.chat_id) {
+          console.error("Error al iniciar el chat:", chatStartData.error);
+          setMessages([
+            {
+              id: "error-start",
+              content: `No se pudo iniciar el chat: ${
+                chatStartData.error || "Error desconocido."
+              }`,
+              sender: "bot",
+              timestamp: new Date(),
+            },
+          ]);
+          setIsTyping(false);
+          return;
+        }
+
+        setCurrentChatId(chatStartData.chat_id);
+        setMessages([
+          {
+            id: Date.now().toString(),
+            content: input,
+            sender: "user",
+            timestamp: new Date(),
+          },
+          {
+            id: Date.now().toString() + "-bot",
+            content: chatStartData.response || "El asistente no respondió.",
+            sender: "bot",
+            timestamp: new Date(),
+          },
+        ]);
+        setInput("");
+      } catch (err) {
+        console.error("Error iniciando chat:", err);
+        setIsTyping(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error de red al enviar mensaje:", error);
-      const networkErrorMessage: Message = {
-        id: Date.now().toString() + "-network-error",
-        content: "Hubo un problema de conexión. Por favor, inténtalo de nuevo.",
-        sender: "bot",
+    } else {
+      // Ya existe chatId, simplemente envía el mensaje como antes
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        content: input,
+        sender: "user",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, networkErrorMessage]);
-    } finally {
-      setIsTyping(false);
+
+      setMessages((prev) => [...prev, userMessage]);
+      setInput("");
+
+      try {
+        const response = await fetch(chatApiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chatId: currentChatId,
+            assistant_id: assistantId,
+            role: "user",
+            content: userMessage.content,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          const botMessage: Message = {
+            id: Date.now().toString() + "-bot",
+            content: data.response,
+            sender: "bot",
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, botMessage]);
+        } else {
+          const errorMessage: Message = {
+            id: Date.now().toString() + "-error",
+            content: `Lo siento, no pude obtener una respuesta: ${
+              data.message || "Error desconocido."
+            }`,
+            sender: "bot",
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, errorMessage]);
+        }
+      } catch (error) {
+        const networkError: Message = {
+          id: Date.now().toString() + "-network-error",
+          content:
+            "Hubo un problema de conexión. Por favor, inténtalo de nuevo.",
+          sender: "bot",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, networkError]);
+      }
     }
+
+    setIsTyping(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -340,7 +353,14 @@ export function ChatWidget({
             getPositionClasses(widgetPosition)
           )}
         >
-          <Card className="shadow-lg rounded-lg overflow-hidden flex flex-col h-[calc(100vh-80px)] max-h-[600px]">
+          <Card
+            className={cn(
+              "shadow-lg rounded-lg overflow-hidden flex flex-col transition-all duration-300",
+              isMinimized
+                ? "h-auto max-h-[80px]"
+                : "h-[calc(100vh-80px)] max-h-[600px]"
+            )}
+          >
             {/* Chat Header */}
             <CardHeader
               className={cn(
@@ -525,18 +545,13 @@ export function ChatWidget({
                         onKeyDown={handleKeyPress}
                         placeholder={inputPlaceholder}
                         className="flex-grow"
-                        disabled={isTyping || !isValidated || !currentChatId}
+                        disabled={isTyping || !isValidated}
                         aria-label="Escribe tu mensaje"
                       />
                       <Button
                         type="submit"
                         size="icon"
-                        disabled={
-                          isTyping ||
-                          !input.trim() ||
-                          !isValidated ||
-                          !currentChatId
-                        }
+                        disabled={isTyping || !input.trim() || !isValidated}
                         className={cn(
                           currentThemeColors.primaryButtonBg,
                           currentThemeColors.primaryButtonText

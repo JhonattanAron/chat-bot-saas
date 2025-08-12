@@ -8,6 +8,7 @@ interface FAQ {
   category: string;
 }
 
+
 export interface ChatAssistant {
   _id?: string;
   user_id: string;

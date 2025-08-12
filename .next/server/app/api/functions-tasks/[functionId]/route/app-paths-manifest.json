@@ -1,0 +1,3 @@
+{
+  "/api/functions-tasks/[functionId]/route": "app/api/functions-tasks/[functionId]/route.js"
+}
