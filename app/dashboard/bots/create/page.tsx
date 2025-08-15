@@ -3,8 +3,8 @@
 import { Badge } from "@/components/ui/badge";
 
 import type React from "react";
-
-import { useState } from "react";
+import { useRef } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
@@ -18,45 +18,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Globe,
-  MessageSquare,
-  ArrowLeft,
-  Plus,
-  Trash2,
-  Loader2,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/contexts/language-context";
 import { TokenCounter } from "@/components/token-counter";
-import { ChatWidgetPreview } from "@/components/chat-widget-preview";
 import { ProductModal } from "@/components/product-modal";
-import { UseCaseSelector } from "@/components/use-case-selector";
-import { CalendarIntegration } from "@/components/calendar-integration";
 import { FunctionModal } from "@/components/functions/function-modal";
-import { MuiColorInput } from "mui-color-input";
-import { ChatWidgetCustomization } from "@/components/chat_cuztomization/chat-widget-customization";
 import SimpleAlert from "@/components/ui/simple-alert";
 import { useChatAssistantStore } from "@/store/chatAsistantStore";
 import { useSession } from "next-auth/react";
-import { APIResponse } from "@/interfaces/api-response-interface";
+import type { APIResponse } from "@/interfaces/api-response-interface";
+import { PlatformSelector } from "@/components/create-bot/plataform-selector";
+
+export interface Integration {
+  name: string;
+  type: string;
+  config: Record<string, any>;
+}
 
 export default function CreateBotPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -167,12 +146,24 @@ export default function CreateBotPage() {
   const totalTokens =
     welcomeMessageTokens + descriptionTokens + faqTokens + productTokens;
 
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+
+  const platformSelectorRef = useRef<{
+    getCurrentIntegrations: () => Integration[];
+  }>(null);
+
   // Modificar el handleSubmit para incluir validación
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (session?.binding_id === undefined) {
       return <SimpleAlert message="Ocurrio un Error con la session" />;
     }
+
+    let finalIntegrations = integrations;
+    if (integrations.length === 0 && platformSelectorRef.current) {
+      finalIntegrations = platformSelectorRef.current.getCurrentIntegrations();
+    }
+
     const response = (await createAssistant({
       user_id: session?.binding_id || "",
       name: botName,
@@ -180,6 +171,7 @@ export default function CreateBotPage() {
       type: botType,
       status: "active",
       funciones: [],
+      integrations: finalIntegrations, // <-- Now sending integrations
       use_case: useCase,
       welcome_message: welcomeMessage,
       faqs: [],
@@ -752,6 +744,13 @@ export default function CreateBotPage() {
     setFunctions(updatedFunctions);
   };
 
+  const handleIntegrationsChange = useCallback(
+    (newIntegrations: Integration[]) => {
+      setIntegrations(newIntegrations);
+    },
+    []
+  );
+
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-4 p-2 sm:p-4 md:gap-8 md:p-8">
@@ -854,58 +853,10 @@ export default function CreateBotPage() {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>{language === "en" ? "Bot Type" : "Tipo de Bot"}</Label>
-                <RadioGroup
-                  defaultValue="web"
-                  className="grid grid-cols-2 gap-4"
-                  onValueChange={(value) => setBotType(value)}
-                >
-                  <div>
-                    <RadioGroupItem
-                      value="web"
-                      id="web"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="web"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                      <Globe className="mb-3 h-6 w-6" />
-                      {language === "en" ? "Website Chatbot" : "Chatbot Web"}
-                    </Label>
-                  </div>
-                  <div>
-                    <RadioGroupItem
-                      value="whatsapp"
-                      id="whatsapp"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="whatsapp"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                      <MessageSquare className="mb-3 h-6 w-6" />
-                      {language === "en" ? "WhatsApp Bot" : "Bot de WhatsApp"}
-                    </Label>
-                  </div>
-                </RadioGroup>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="use-case">
-                  {language === "en" ? "Use Case" : "Caso de Uso"}
-                </Label>
-                <UseCaseSelector
-                  value={useCase}
-                  onChange={loadUseCaseTemplate}
-                  language={language as "en" | "es"}
-                />
-                <p className="text-sm text-muted-foreground mt-1">
-                  {language === "en"
-                    ? "Select a use case to load pre-configured templates for your bot."
-                    : "Seleccione un caso de uso para cargar plantillas preconfiguradas para su bot."}
-                </p>
-              </div>
+              <PlatformSelector
+                ref={platformSelectorRef}
+                onIntegrationsChange={handleIntegrationsChange}
+              />
             </CardContent>
           </Card>
 

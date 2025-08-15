@@ -10,7 +10,6 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zustand/esm/react.mjs [app-ssr] (ecmascript)");
 ;
-const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8080";
 const useChatAssistantStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["create"])((set, get)=>({
         assistants: [],
         loading: false,
@@ -36,7 +35,6 @@ const useChatAssistantStore = (0, __TURBOPACK__imported__module__$5b$project$5d2
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || "Error creating FAQ");
-                // Opcional: actualizar el estado local si lo necesitas
                 set({
                     loading: false
                 });
@@ -160,6 +158,7 @@ const useChatAssistantStore = (0, __TURBOPACK__imported__module__$5b$project$5d2
                         name: assistant.name,
                         description: assistant.description,
                         funciones: assistant.funciones,
+                        integrations: assistant.integrations,
                         type: assistant.type,
                         status: assistant.status,
                         use_case: assistant.use_case,

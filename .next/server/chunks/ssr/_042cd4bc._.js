@@ -61,7 +61,8 @@ __turbopack_context__.n(__TURBOPACK__imported__module__$5b$project$5d2f$componen
 var { g: global, __dirname } = __turbopack_context__;
 {
 __turbopack_context__.s({
-    "cn": (()=>cn)
+    "cn": (()=>cn),
+    "parseProductString": (()=>parseProductString)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/clsx/dist/clsx.mjs [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/tailwind-merge/dist/bundle-mjs.mjs [app-rsc] (ecmascript)");
@@ -69,6 +70,30 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$
 ;
 function cn(...inputs) {
     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["twMerge"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["clsx"])(inputs));
+}
+function parseProductString(input) {
+    const regex = /\{(.+?)\}/g;
+    const matches = [
+        ...input.matchAll(regex)
+    ];
+    if (matches.length < 3 || matches.length > 4) {
+        throw new Error("Formato inválido. Se esperaban 3 o 4 valores entre llaves.");
+    }
+    const [name, price, description] = matches.map((m)=>m[1]);
+    // Si hay una cuarta llave, extraer stock desde ella
+    let stock = 0;
+    if (matches[3]) {
+        const stockMatch = matches[3][1].match(/(\d+)/);
+        if (stockMatch) {
+            stock = parseInt(stockMatch[1], 10);
+        }
+    }
+    return {
+        name,
+        price,
+        description,
+        stock
+    };
 }
 }}),
 "[project]/components/ui/button.tsx [app-rsc] (ecmascript)": ((__turbopack_context__) => {

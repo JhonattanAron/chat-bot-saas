@@ -814,7 +814,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                 className: "h-4 w-4 text-primary"
                             }, void 0, false, {
                                 fileName: "[project]/components/token-counter-compact.tsx",
-                                lineNumber: 28,
+                                lineNumber: 37,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -826,18 +826,18 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/token-counter-compact.tsx",
-                                lineNumber: 29,
+                                lineNumber: 38,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/token-counter-compact.tsx",
-                        lineNumber: 27,
+                        lineNumber: 36,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/token-counter-compact.tsx",
-                    lineNumber: 26,
+                    lineNumber: 35,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tooltip$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TooltipContent"], {
@@ -849,7 +849,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                             children: "Token Usage"
                         }, void 0, false, {
                             fileName: "[project]/components/token-counter-compact.tsx",
-                            lineNumber: 35,
+                            lineNumber: 44,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -860,7 +860,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Input:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 37,
+                                    lineNumber: 46,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -868,7 +868,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: inputTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 38,
+                                    lineNumber: 47,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -876,7 +876,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Output:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 39,
+                                    lineNumber: 48,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -884,7 +884,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: outputTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 40,
+                                    lineNumber: 49,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -892,7 +892,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Total:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 41,
+                                    lineNumber: 50,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -900,7 +900,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: totalTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 42,
+                                    lineNumber: 51,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -908,7 +908,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Limit:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 43,
+                                    lineNumber: 52,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -916,30 +916,30 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: maxTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 44,
+                                    lineNumber: 53,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/token-counter-compact.tsx",
-                            lineNumber: 36,
+                            lineNumber: 45,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/token-counter-compact.tsx",
-                    lineNumber: 34,
+                    lineNumber: 43,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/token-counter-compact.tsx",
-            lineNumber: 25,
+            lineNumber: 34,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/token-counter-compact.tsx",
-        lineNumber: 24,
+        lineNumber: 33,
         columnNumber: 5
     }, this);
 }

@@ -1,24 +1,30 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Zap } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Zap } from "lucide-react";
+import { useDashboardStore } from "../store/dashboard-store";
 
-interface TokenCounterCompactProps {
-  inputTokens: number
-  outputTokens: number
-  maxTokens: number
-}
+export function TokenCounterCompact() {
+  const { tokenUsage } = useDashboardStore();
 
-export function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }: TokenCounterCompactProps) {
-  const totalTokens = inputTokens + outputTokens
-  const percentage = (totalTokens / maxTokens) * 100
+  const inputTokens = tokenUsage?.input_tokens || 0;
+  const outputTokens = tokenUsage?.output_tokens || 0;
+  const maxTokens = tokenUsage?.max_tokens || 10000;
+
+  const totalTokens = inputTokens + outputTokens;
+  const percentage = (totalTokens / maxTokens) * 100;
 
   const getVariant = () => {
-    if (percentage >= 90) return "destructive"
-    if (percentage >= 70) return "outline"
-    return "secondary"
-  }
+    if (percentage >= 90) return "destructive";
+    if (percentage >= 70) return "outline";
+    return "secondary";
+  };
 
   return (
     <TooltipProvider>
@@ -46,5 +52,5 @@ export function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }: To
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
+  );
 }

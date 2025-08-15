@@ -1,4 +1,4 @@
-import { APIResponse } from "@/interfaces/api-response-interface";
+import type { APIResponse } from "@/interfaces/api-response-interface";
 import { create } from "zustand";
 
 interface FAQ {
@@ -8,6 +8,11 @@ interface FAQ {
   category: string;
 }
 
+interface Integration {
+  name: string;
+  type: string;
+  config: Record<string, any>;
+}
 
 export interface ChatAssistant {
   _id?: string;
@@ -15,6 +20,7 @@ export interface ChatAssistant {
   name: string;
   description: string;
   funciones?: [];
+  integrations?: Integration[]; // <-- Nuevo campo
   type: string;
   status: string;
   use_case: string;
@@ -62,11 +68,8 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
 
   setAssistants: (assistants) => set({ assistants }),
   setError: (error) => set({ error }),
-  createFaq: async (faqData: {
-    user_id: string;
-    assistant_id: string;
-    faqs: FAQ[];
-  }) => {
+
+  createFaq: async (faqData) => {
     set({ loading: true, error: null });
     try {
       const res = await fetch("/api/faq-tasks", {
@@ -76,7 +79,6 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error creating FAQ");
-      // Opcional: actualizar el estado local si lo necesitas
       set({ loading: false });
       return data;
     } catch (err: any) {
@@ -85,12 +87,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
     }
   },
 
-  updateFaq: async (faqUpdate: {
-    user_id: string;
-    assistant_id: string;
-    faqId: string;
-    update: Partial<FAQ>;
-  }) => {
+  updateFaq: async (faqUpdate) => {
     set({ loading: true, error: null });
     try {
       const res = await fetch("/api/faq-tasks", {
@@ -108,11 +105,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
     }
   },
 
-  deleteFaq: async (params: {
-    user_id: string;
-    assistant_id: string;
-    faqId: string;
-  }) => {
+  deleteFaq: async (params) => {
     set({ loading: true, error: null });
     try {
       const query = new URLSearchParams(
@@ -144,6 +137,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
       return [];
     }
   },
+
   getAssistantById: async (chat_id, user_id) => {
     set({ loading: true, error: null });
     try {
@@ -171,6 +165,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
           name: assistant.name,
           description: assistant.description,
           funciones: assistant.funciones,
+          integrations: assistant.integrations, // <-- Se envía
           type: assistant.type,
           status: assistant.status,
           use_case: assistant.use_case,
@@ -199,7 +194,7 @@ export const useChatAssistantStore = create<ChatAssistantStore>((set, get) => ({
       const res = await fetch("/api/asistant-tasks", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(assistant),
+        body: JSON.stringify(assistant), // Incluye integrations también
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error updating assistant");

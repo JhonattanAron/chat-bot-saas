@@ -229,11 +229,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
         </div>
         <div className="flex items-center gap-2">
-          <TokenCounterCompact
-            inputTokens={tokenUsage.input}
-            outputTokens={tokenUsage.output}
-            maxTokens={tokenUsage.maxTokens}
-          />
+          <TokenCounterCompact />
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
