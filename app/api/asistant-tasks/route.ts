@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
         user_id
       )}`
     );
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Llama al endpoint de NestJS
-    const response = await fetch(`${NEST_API_URL}/users/assistant-chat`, {
+    const response = await fetch(`${NEST_API_URL}/users/assistant-chats`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

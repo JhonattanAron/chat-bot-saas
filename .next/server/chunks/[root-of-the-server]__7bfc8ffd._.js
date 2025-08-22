@@ -123,7 +123,7 @@ async function POST(req) {
             }
         }
         // Llama al endpoint de NestJS
-        const response = await fetch(`${NEST_API_URL}/users/assistant-chat`, {
+        const response = await fetch(`${NEST_API_URL}/users/assistant-chats`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

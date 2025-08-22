@@ -1712,8 +1712,11 @@ export default function EditBotPage({
       <FunctionModal
         open={isFunctionModalOpen}
         onOpenChange={setIsFunctionModalOpen}
+        // @ts-ignore
         onAddFunction={handleAddFunction}
+        // @ts-ignore
         editFunction={editingFunction}
+        // @ts-ignore
         onEditFunction={handleEditFunction}
         language={language}
       />

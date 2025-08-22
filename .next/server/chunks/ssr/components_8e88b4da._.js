@@ -116,12 +116,18 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/badge.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tooltip$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/tooltip.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zap.js [app-ssr] (ecmascript) <export default as Zap>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$store$2f$dashboard$2d$store$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/store/dashboard-store.ts [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
 ;
 ;
-function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
+;
+function TokenCounterCompact() {
+    const { tokenUsage } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$store$2f$dashboard$2d$store$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDashboardStore"])();
+    const inputTokens = tokenUsage?.input_tokens || 0;
+    const outputTokens = tokenUsage?.output_tokens || 0;
+    const maxTokens = tokenUsage?.max_tokens || 10000;
     const totalTokens = inputTokens + outputTokens;
     const percentage = totalTokens / maxTokens * 100;
     const getVariant = ()=>{
@@ -141,7 +147,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                 className: "h-4 w-4 text-primary"
                             }, void 0, false, {
                                 fileName: "[project]/components/token-counter-compact.tsx",
-                                lineNumber: 37,
+                                lineNumber: 34,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -153,18 +159,18 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/token-counter-compact.tsx",
-                                lineNumber: 38,
+                                lineNumber: 35,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/token-counter-compact.tsx",
-                        lineNumber: 36,
+                        lineNumber: 33,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/token-counter-compact.tsx",
-                    lineNumber: 35,
+                    lineNumber: 32,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tooltip$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TooltipContent"], {
@@ -176,7 +182,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                             children: "Token Usage"
                         }, void 0, false, {
                             fileName: "[project]/components/token-counter-compact.tsx",
-                            lineNumber: 44,
+                            lineNumber: 41,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -187,7 +193,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Input:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 46,
+                                    lineNumber: 43,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -195,7 +201,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: inputTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 47,
+                                    lineNumber: 44,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -203,7 +209,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Output:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 48,
+                                    lineNumber: 45,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -211,7 +217,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: outputTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 49,
+                                    lineNumber: 46,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -219,7 +225,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Total:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 50,
+                                    lineNumber: 47,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -227,7 +233,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: totalTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 51,
+                                    lineNumber: 48,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -235,7 +241,7 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: "Limit:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 52,
+                                    lineNumber: 49,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -243,30 +249,30 @@ function TokenCounterCompact({ inputTokens, outputTokens, maxTokens }) {
                                     children: maxTokens.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/components/token-counter-compact.tsx",
-                                    lineNumber: 53,
+                                    lineNumber: 50,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/token-counter-compact.tsx",
-                            lineNumber: 45,
+                            lineNumber: 42,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/token-counter-compact.tsx",
-                    lineNumber: 43,
+                    lineNumber: 40,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/token-counter-compact.tsx",
-            lineNumber: 34,
+            lineNumber: 31,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/token-counter-compact.tsx",
-        lineNumber: 33,
+        lineNumber: 30,
         columnNumber: 5
     }, this);
 }
@@ -698,18 +704,14 @@ function DashboardLayout({ children }) {
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center gap-2",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$token$2d$counter$2d$compact$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TokenCounterCompact"], {
-                                inputTokens: tokenUsage.input,
-                                outputTokens: tokenUsage.output,
-                                maxTokens: tokenUsage.maxTokens
-                            }, void 0, false, {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$token$2d$counter$2d$compact$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TokenCounterCompact"], {}, void 0, false, {
                                 fileName: "[project]/components/dashboard-layout.tsx",
                                 lineNumber: 232,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$mode$2d$toggle$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ModeToggle"], {}, void 0, false, {
                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                lineNumber: 237,
+                                lineNumber: 233,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenu"], {
@@ -725,7 +727,7 @@ function DashboardLayout({ children }) {
                                                     className: "h-5 w-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 245,
+                                                    lineNumber: 241,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -733,18 +735,18 @@ function DashboardLayout({ children }) {
                                                     children: "Cambiar idioma"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 246,
+                                                    lineNumber: 242,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                            lineNumber: 240,
+                                            lineNumber: 236,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 235,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -762,33 +764,33 @@ function DashboardLayout({ children }) {
                                                                 children: "🇪🇸"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 255,
+                                                                lineNumber: 251,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Español"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 256,
+                                                                lineNumber: 252,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 254,
+                                                        lineNumber: 250,
                                                         columnNumber: 17
                                                     }, this),
                                                     language === "es" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 258,
+                                                        lineNumber: 254,
                                                         columnNumber: 39
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                lineNumber: 250,
+                                                lineNumber: 246,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -802,45 +804,45 @@ function DashboardLayout({ children }) {
                                                                 children: "🇺🇸"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 265,
+                                                                lineNumber: 261,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "English"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 266,
+                                                                lineNumber: 262,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 264,
+                                                        lineNumber: 260,
                                                         columnNumber: 17
                                                     }, this),
                                                     language === "en" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 268,
+                                                        lineNumber: 264,
                                                         columnNumber: 39
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                lineNumber: 260,
+                                                lineNumber: 256,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 249,
+                                        lineNumber: 245,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                lineNumber: 238,
+                                lineNumber: 234,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenu"], {
@@ -856,14 +858,14 @@ function DashboardLayout({ children }) {
                                                     className: "h-5 w-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 279,
+                                                    lineNumber: 275,
                                                     columnNumber: 17
                                                 }, this),
                                                 hasNotifications && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "absolute right-1 top-1 flex h-2 w-2 rounded-full bg-gradient-to-r from-primary to-primary/80"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 281,
+                                                    lineNumber: 277,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -871,18 +873,18 @@ function DashboardLayout({ children }) {
                                                     children: "Notificaciones"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 283,
+                                                    lineNumber: 279,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                            lineNumber: 274,
+                                            lineNumber: 270,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 273,
+                                        lineNumber: 269,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -897,7 +899,7 @@ function DashboardLayout({ children }) {
                                                         children: "Notificaciones"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 288,
+                                                        lineNumber: 284,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -907,13 +909,13 @@ function DashboardLayout({ children }) {
                                                         children: "Marcar todas como leídas"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 289,
+                                                        lineNumber: 285,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                lineNumber: 287,
+                                                lineNumber: 283,
                                                 columnNumber: 15
                                             }, this),
                                             notifications.map((notification)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -929,7 +931,7 @@ function DashboardLayout({ children }) {
                                                                         children: notification.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                                        lineNumber: 301,
+                                                                        lineNumber: 297,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -938,13 +940,13 @@ function DashboardLayout({ children }) {
                                                                         children: notification.type === "billing" ? "Facturación" : notification.type === "warning" ? "Advertencia" : "Soporte"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                                        lineNumber: 302,
+                                                                        lineNumber: 298,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 300,
+                                                                lineNumber: 296,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -952,7 +954,7 @@ function DashboardLayout({ children }) {
                                                                 children: notification.description
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 319,
+                                                                lineNumber: 315,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -960,18 +962,18 @@ function DashboardLayout({ children }) {
                                                                 children: notification.date
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 322,
+                                                                lineNumber: 318,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 299,
+                                                        lineNumber: 295,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, notification.id, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 298,
+                                                    lineNumber: 294,
                                                     columnNumber: 17
                                                 }, this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -983,24 +985,24 @@ function DashboardLayout({ children }) {
                                                     children: "Ver todas las notificaciones"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 329,
+                                                    lineNumber: 325,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                lineNumber: 328,
+                                                lineNumber: 324,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 286,
+                                        lineNumber: 282,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                lineNumber: 272,
+                                lineNumber: 268,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Avatar"], {
@@ -1011,7 +1013,7 @@ function DashboardLayout({ children }) {
                                         alt: "Avatar"
                                     }, void 0, false, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 333,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AvatarFallback"], {
@@ -1019,13 +1021,13 @@ function DashboardLayout({ children }) {
                                         children: "JD"
                                     }, void 0, false, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 342,
+                                        lineNumber: 338,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                lineNumber: 335,
+                                lineNumber: 331,
                                 columnNumber: 11
                             }, this)
                         ]
@@ -1059,7 +1061,7 @@ function DashboardLayout({ children }) {
                                                     children: "Navegación"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 354,
+                                                    lineNumber: 350,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1072,25 +1074,25 @@ function DashboardLayout({ children }) {
                                                                     className: `h-5 w-5 ${route.active ? "text-primary-foreground" : "text-muted-foreground"}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                                    lineNumber: 368,
+                                                                    lineNumber: 364,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 route.label
                                                             ]
                                                         }, route.href, true, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 359,
+                                                            lineNumber: 355,
                                                             columnNumber: 21
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 357,
+                                                    lineNumber: 353,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                            lineNumber: 353,
+                                            lineNumber: 349,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1101,7 +1103,7 @@ function DashboardLayout({ children }) {
                                                     children: "Acciones rápidas"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 378,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1115,14 +1117,14 @@ function DashboardLayout({ children }) {
                                                                     className: "mr-2 h-5 w-5 text-muted-foreground"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                                    lineNumber: 390,
+                                                                    lineNumber: 386,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 "Crear nuevo bot"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 386,
+                                                            lineNumber: 382,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1133,32 +1135,32 @@ function DashboardLayout({ children }) {
                                                                     className: "mr-2 h-5 w-5 text-muted-foreground"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                                    lineNumber: 397,
+                                                                    lineNumber: 393,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 "Ver estadísticas"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 393,
+                                                            lineNumber: 389,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 385,
+                                                    lineNumber: 381,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 377,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                    lineNumber: 352,
+                                    lineNumber: 348,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1176,7 +1178,7 @@ function DashboardLayout({ children }) {
                                                             alt: "Avatar"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 408,
+                                                            lineNumber: 404,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AvatarFallback"], {
@@ -1184,13 +1186,13 @@ function DashboardLayout({ children }) {
                                                             children: "AV"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 413,
+                                                            lineNumber: 409,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 406,
+                                                    lineNumber: 402,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1201,7 +1203,7 @@ function DashboardLayout({ children }) {
                                                             children: session?.user?.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 418,
+                                                            lineNumber: 414,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1209,13 +1211,13 @@ function DashboardLayout({ children }) {
                                                             children: session?.user?.email
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                                            lineNumber: 421,
+                                                            lineNumber: 417,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 417,
+                                                    lineNumber: 413,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1229,7 +1231,7 @@ function DashboardLayout({ children }) {
                                                                 className: "h-5 w-5"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 431,
+                                                                lineNumber: 427,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1237,45 +1239,45 @@ function DashboardLayout({ children }) {
                                                                 children: "Log out"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/dashboard-layout.tsx",
-                                                                lineNumber: 432,
+                                                                lineNumber: 428,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                                        lineNumber: 426,
+                                                        lineNumber: 422,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                                    lineNumber: 425,
+                                                    lineNumber: 421,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/dashboard-layout.tsx",
-                                            lineNumber: 405,
+                                            lineNumber: 401,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/dashboard-layout.tsx",
-                                        lineNumber: 404,
+                                        lineNumber: 400,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/dashboard-layout.tsx",
-                                    lineNumber: 403,
+                                    lineNumber: 399,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/dashboard-layout.tsx",
-                            lineNumber: 351,
+                            lineNumber: 347,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/dashboard-layout.tsx",
-                        lineNumber: 350,
+                        lineNumber: 346,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1283,13 +1285,13 @@ function DashboardLayout({ children }) {
                         children: children
                     }, void 0, false, {
                         fileName: "[project]/components/dashboard-layout.tsx",
-                        lineNumber: 440,
+                        lineNumber: 436,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/dashboard-layout.tsx",
-                lineNumber: 348,
+                lineNumber: 344,
                 columnNumber: 7
             }, this)
         ]
