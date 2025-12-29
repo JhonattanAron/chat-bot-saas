@@ -25,9 +25,10 @@ import {
 } from "lucide-react";
 import { TokenCounterGlobal } from "@/components/token-counter-global";
 import { useDashboardStore } from "@/store/dashboard-store";
+import { useSession } from "next-auth/react";
 
 export default function DashboardPage() {
-  const [userId, setUserId] = useState<string>("6859dde943c4c91a1db4642c"); // In real app, get from auth context
+  const { data: session } = useSession();
   const {
     stats,
     bots,
@@ -39,11 +40,11 @@ export default function DashboardPage() {
   } = useDashboardStore();
 
   useEffect(() => {
-    if (userId) {
-      fetchDashboardData(userId);
-      console.log("Fetching dashboard data for user:", userId);
+    if (session?.binding_id) {
+      fetchDashboardData(session.binding_id);
+      console.log("Fetching dashboard data for user:", session.binding_id);
     }
-  }, [userId, fetchDashboardData]);
+  }, [session?.binding_id, fetchDashboardData]);
 
   if (error) {
     return (

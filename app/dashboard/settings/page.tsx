@@ -33,6 +33,7 @@ import {
 import { ApiKeyManager } from "@/components/api-key-manager";
 import { useSettingsStore } from "@/store/SettingsStore";
 import { useToast } from "@/hooks/use-toast";
+import { PlansCheckout } from "@/components/checkout-form";
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
@@ -73,7 +74,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (userId && status === "authenticated") {
-      fetchAllData(userId);
+      //fetchAllData(userId);
     }
   }, [userId, status, fetchAllData]);
 
@@ -239,12 +240,7 @@ export default function SettingsPage() {
             >
               Account
             </TabsTrigger>
-            <TabsTrigger
-              value="billing"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/80 data-[state=active]:text-primary-foreground"
-            >
-              Billing
-            </TabsTrigger>
+
             <TabsTrigger
               value="notifications"
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/80 data-[state=active]:text-primary-foreground"
@@ -461,124 +457,6 @@ export default function SettingsPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="billing" className="space-y-6">
-            {billing && (
-              <>
-                <Card className="futuristic-card">
-                  <CardHeader>
-                    <CardTitle className="text-xl">Subscription</CardTitle>
-                    <CardDescription>
-                      Manage your subscription and billing information.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="rounded-lg border border-border/50 bg-gradient-to-r from-primary/5 to-primary/10 p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">
-                            {billing.subscription.plan}
-                          </h4>
-                          <p className="text-sm text-muted-foreground">
-                            {billing.subscription.price} per{" "}
-                            {billing.subscription.interval}
-                          </p>
-                        </div>
-                        <Badge className="bg-gradient-to-r from-green-500 to-green-600 capitalize">
-                          {billing.subscription.status}
-                        </Badge>
-                      </div>
-                      <Separator className="my-4" />
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>Next billing date</span>
-                          <span className="font-medium">
-                            {new Date(
-                              billing.subscription.nextBillingDate
-                            ).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Payment method</span>
-                          <span className="flex items-center font-medium">
-                            <CreditCard className="mr-1 h-3 w-3" /> ••••{" "}
-                            {billing.subscription.paymentMethod.last4}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2 sm:flex-row">
-                      <Button
-                        variant="outline"
-                        className="glass-effect bg-transparent"
-                      >
-                        Change Plan
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="glass-effect bg-transparent"
-                      >
-                        Update Payment Method
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="text-destructive hover:text-destructive glass-effect bg-transparent"
-                      >
-                        Cancel Subscription
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="futuristic-card">
-                  <CardHeader>
-                    <CardTitle className="text-xl">Billing History</CardTitle>
-                    <CardDescription>
-                      View your recent invoices.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-3 text-sm font-medium">
-                        <div>Date</div>
-                        <div>Amount</div>
-                        <div className="text-right">Status</div>
-                      </div>
-                      <Separator />
-                      {billing.billingHistory.map((invoice) => (
-                        <div key={invoice.id}>
-                          <div className="grid grid-cols-3 items-center text-sm">
-                            <div>
-                              {new Date(invoice.date).toLocaleDateString()}
-                            </div>
-                            <div>{invoice.amount}</div>
-                            <div className="flex justify-end">
-                              <Badge
-                                variant="outline"
-                                className="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border-green-200 capitalize"
-                              >
-                                {invoice.status}
-                              </Badge>
-                            </div>
-                          </div>
-                          <Separator className="mt-4" />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="glass-effect bg-transparent"
-                    >
-                      Download All Invoices
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </>
-            )}
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">

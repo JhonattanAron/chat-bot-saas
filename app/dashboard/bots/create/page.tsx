@@ -30,6 +30,7 @@ import { useChatAssistantStore } from "@/store/chatAsistantStore";
 import { useSession } from "next-auth/react";
 import type { APIResponse } from "@/interfaces/api-response-interface";
 import { PlatformSelector } from "@/components/create-bot/plataform-selector";
+import WhatsAppLinker from "@/components/create-bot/Whatsapp-link-component";
 
 export interface Integration {
   name: string;
@@ -857,6 +858,10 @@ export default function CreateBotPage() {
                 ref={platformSelectorRef}
                 onIntegrationsChange={handleIntegrationsChange}
               />
+              {/*<WhatsAppLinker
+                currentUser={{ id: session?.binding_id || "" }}
+                selectedPlatforms={["whatsapp"]}
+              />*/}
             </CardContent>
           </Card>
 

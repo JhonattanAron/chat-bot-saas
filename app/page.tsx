@@ -16,7 +16,7 @@ export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const CLIENT_KEY =
     "317ff11abaf125986f8129f001efea226a5d0c9216ac24e48091e617bbf39ab7";
-  const ASSISTANT_ID = "69387a5d3d0df24657fbb23c";
+  const ASSISTANT_ID = "69398394a5bac4c2b8659ca8";
   const USER_ID = "6938644c9e7ff7ff4f5a1c81";
 
   const toggleChat = () => {

@@ -101,7 +101,7 @@ const handler = NextAuth({
         try {
           // Solicitar el token personalizado al backend
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/google-login`,
+            `${process.env.NEST_API_URL}/auth/google-login`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
