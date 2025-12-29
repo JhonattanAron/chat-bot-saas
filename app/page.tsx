@@ -15,9 +15,9 @@ import { Toaster } from "@/components/ui/toaster";
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const CLIENT_KEY =
-    "5044399ff0cb270a50d0098f147790d15c6569916cdf352b2fd3466fd0a95412";
-  const ASSISTANT_ID = "686d8132f81fdde126ef273b";
-  const USER_ID = "6859dde943c4c91a1db4642c";
+    "317ff11abaf125986f8129f001efea226a5d0c9216ac24e48091e617bbf39ab7";
+  const ASSISTANT_ID = "69387a5d3d0df24657fbb23c";
+  const USER_ID = "6938644c9e7ff7ff4f5a1c81";
 
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
@@ -36,7 +36,7 @@ export default function Home() {
       <Footer />
       <ChatWidget
         clientKey={CLIENT_KEY}
-        validationApiUrl="/api/validate-sdk" // Points to the new validation API route
+        validationApiUrl="http://localhost:8081/api-key-validate/validate-client-key" // Points to the new validation API route
         chatApiUrl="/api/chat/message" // Points to your existing chat message API route
         chatStartApiUrl="/api/chat/start" // Points to your existing chat start API route
         assistantId={ASSISTANT_ID}

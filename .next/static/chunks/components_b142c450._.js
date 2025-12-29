@@ -1331,7 +1331,7 @@ function DashboardLayout({ children }) {
         columnNumber: 5
     }, this);
 }
-_s(DashboardLayout, "AQYXD6i6hzc+JEFyPqxI/BriR/g=", false, function() {
+_s(DashboardLayout, "2oYeP239Xq2+92oU+wSqOwF9b6w=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
@@ -1870,7 +1870,7 @@ function ChatWidgetPreview({ settings }) {
         columnNumber: 5
     }, this);
 }
-_s(ChatWidgetPreview, "29/kUFczzOKnC7qSpuOVLuXajfU=");
+_s(ChatWidgetPreview, "RJsnAWTa2sNYJudzh6F1PCRByIo=");
 _c = ChatWidgetPreview;
 // Helper function to adjust color brightness
 function adjustColor(color, amount) {

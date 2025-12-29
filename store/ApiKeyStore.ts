@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const NEST_API_URL = "http://localhost:8080";
+const NEST_API_URL = "http://localhost:8081";
 
 interface ApiKey {
   id: string;

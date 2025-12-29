@@ -67,7 +67,7 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
 ;
 // Cambia esto por la URL real de tu backend NestJS
-const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8080";
+const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8081";
 async function GET(req) {
     const { searchParams } = new URL(req.url);
     const user_id = searchParams.get("user_id");
@@ -123,7 +123,7 @@ async function POST(req) {
             }
         }
         // Llama al endpoint de NestJS
-        const response = await fetch(`${NEST_API_URL}/users/assistant-chats`, {
+        const response = await fetch(`${NEST_API_URL}/users/assistant-chat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

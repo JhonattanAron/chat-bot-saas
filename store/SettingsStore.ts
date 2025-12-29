@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-const NEST_API_URL = "http://localhost:8080";
+const NEST_API_URL = "http://localhost:8081";
 
 interface Profile {
   firstName: string;

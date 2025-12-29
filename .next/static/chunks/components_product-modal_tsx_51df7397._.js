@@ -1688,7 +1688,7 @@ function ProductModal({ open, onOpenChange, onAddProduct }) {
         columnNumber: 5
     }, this);
 }
-_s(ProductModal, "XhWYUmHbiZlluU06s0wkOUnq6qQ=", false, function() {
+_s(ProductModal, "aQFALZWBEXOJdr5s2ragzm3n7Ww=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$contexts$2f$language$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLanguage"]
     ];

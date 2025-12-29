@@ -43,7 +43,7 @@ export interface DashboardStore extends DashboardData {
   clearError: () => void;
 }
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "http://localhost:8081";
 
 export const useDashboardStore = create<DashboardStore>()(
   devtools(

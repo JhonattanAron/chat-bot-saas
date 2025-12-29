@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Cambia esto por la URL real de tu backend NestJS
-const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8080";
+const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8081";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Llama al endpoint de NestJS
-    const response = await fetch(`${NEST_API_URL}/users/assistant-chats`, {
+    const response = await fetch(`${NEST_API_URL}/users/assistant-chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

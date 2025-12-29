@@ -77,8 +77,8 @@ export default function BotsPage() {
   }, [session, getAssistants, fetchUserPlan]);
 
   const currentBotCount = assistants.length;
-  const maxBots = userPlan?.data.plan.max_chatbots || 0;
-  const planName = userPlan?.data.plan.name || "Free";
+  const maxBots = 1;
+  const planName = "Free";
   if (loading) {
     return (
       <DashboardLayout>

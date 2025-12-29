@@ -30,7 +30,7 @@ interface AutomatedTasksState {
   testEmailConnection: (emailConfig: any) => Promise<any>;
   handleWebhook: (taskId: string, payload: any) => Promise<any>;
 }
-const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8080";
+const NEST_API_URL = process.env.NEST_API_URL || "http://localhost:8081";
 
 export const useAutomatedTasksStore = create<AutomatedTasksState>((set) => ({
   tasks: [],
